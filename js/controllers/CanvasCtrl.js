@@ -261,6 +261,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     ***************************/
     $scope.lastChosen = -1;
 
+
     $scope.saveSlide = function(){
         var saved = $scope.canvas.toJSON();
         saved = JSON.stringify(saved);
@@ -273,7 +274,12 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
             $scope.canvas.renderAll();
             $scope.qUndo();
         })
-        $scope.lastChosen = index;
+        if(index == $scope.lastChosen){
+            $scope.lastChosen = -1;
+        } else {
+            $scope.lastChosen = index;
+        }
+        console.log(index);
     };
 
 
