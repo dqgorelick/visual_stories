@@ -3,7 +3,7 @@
 *******************************/
 
 #timeline, #backdrop {
-    padding: 10px;
+    padding: 11px;
     position: fixed;
     width: 100%;
     left: 0;
@@ -180,3 +180,20 @@
     font-size: 20px;
 }
 
+.changeAll{
+    -webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.2s;
+    transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.2s;
+    display: inline;
+    height:28px;
+    width:0px;
+    background-color: #ffffff;
+    position: absolute;
+    top: 12px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.changeAll.active{
+    height: 28px;
+    width: 340px;
+}

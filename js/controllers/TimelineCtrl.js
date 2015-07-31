@@ -79,8 +79,13 @@ angular.module('Timeline', ['TimelineService', 'cfp.hotkeys']).controller('Timel
     	}
     };
 
+    $scope.changeAll = function() {
+        $scope.changeAllExpanded = !$scope.changeAllExpanded;
+        console.log("working", $scope.changeAllExpanded);
+    };
+
+    $scope.changeAllExpanded = false;
 
     this.dropCallback = function(event, ui, title, $index) {
-        console.log("worked");
     };
 });
