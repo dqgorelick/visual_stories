@@ -6,6 +6,10 @@ angular.module('Editor', ['ConfigService']).controller('EditorCtrl', function($s
         $scope.$parent.canvas.on('mouse:up', function(){
             $scope.$parent.qUndo();
         });
+
+        $scope.$on('metadata', function(event, text) {
+            $scope.text.content = text;
+        })
     }
 
     $scope.dragStart = function(event) {

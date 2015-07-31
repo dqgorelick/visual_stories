@@ -6,14 +6,19 @@
         ken burns selection - Dan - DONE
         show the length of the video - Jordan DONE
         show the length of the video - Sam DONE
-        populate text from metadata
-        preview doesn't work and breaks custom rects for text - Sam
+        populate text from metadata Sam DONE
+        preview doesn't work and breaks custom rects for text - Sam DONE
 
         P3:
-        Smarter generation? Algorithm
+        Put it on a server
+        Share buttons
+
+        P4:
+        Smarter generation? Algorithm - definitely less images
         push things out of the way
         gif export is slow
         Make it easier to create rectangles
+
 
     BUGS TO FIX:
         P1:
@@ -277,10 +282,10 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         })
         if(index == $scope.lastChosen){
             $scope.lastChosen = -1;
+            $scope.clearCanvas();
         } else {
             $scope.lastChosen = index;
         }
-        console.log(index);
     };
 
 

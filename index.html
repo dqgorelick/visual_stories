@@ -61,11 +61,27 @@
     <div class="left">
         <div id="mainWrapper">
             <div id="modeWrapper">
-                <input class="btn btn-sm btn-primary" ng-click="createSlides();" value="Generate" type="button">
-                <input class="btn btn-sm" ng-class='playing ? "btn-danger" : "btn-primary"' ng-click="playing ? stop() : playSlides()" id="play" value="{{playing ? 'Stop' : 'Play'}}" type="button">
-                <input type="button" class="btn btn-sm btn-primary" ng-click="playSlides(true)" value="Render">
-                <input type="button" class="btn btn-sm btn-primary" ng-click="popUndo()" value="UNDO">
-                <input class="btn btn-sm btn-primary" value="Clear" type="button" ng-click="clearCanvas()" />
+                <button class="btn btn-sm btn-primary" ng-click="createSlides();" value="Generate" type="button">
+                <span class='glyphicon glyphicon-flash'></span>
+                Generate
+                </button>
+                <button type="button" class="btn btn-sm" ng-class='playing ? "btn-danger" : "btn-primary"' ng-click="playing ? stop() : playSlides()" id="play">
+                    <span class="glyphicon" ng-class="playing ? 'glyphicon-stop' : 'glyphicon-play'">
+                    </span>
+                    {{playing ? 'Stop' : 'Play'}}
+                </button>
+                <button type="button" class="btn btn-sm btn-primary" ng-click="playSlides(true)">
+                    <span class="glyphicon glyphicon-record"></span>
+                     Render
+                </button>
+                <button type="button" class="btn btn-sm btn-primary" ng-click="popUndo()">
+                <span class="glyphicon glyphicon-thumbs-down"></span>
+                Undo
+                </button>
+                <button class="btn btn-sm btn-primary" value="Clear" type="button" ng-click="clearCanvas()">
+                <span class="glyphicon glyphicon-remove-circle"></span>
+                Clear
+                </button>
                 <input class="btn btn btn-muted" ng-click="showCanvas = !showCanvas" id="toggle" value="{{showCanvas ? 'EDITOR' : 'PLAYER'}}" type="button">
             </div>
             <div id="mediaWrapper">
@@ -90,9 +106,10 @@
             <input ng-show="showCanvas" class="btn btn-sm btn-primary addSlide" ng-click="addSlide(); $broadcast('newSlides'); " value="Add slide" type="button">
         <div ng-controller="TimelineCtrl as loki">
             <div id="timeline" class="sliding" ng-class="{expanded: expandTimeline}">
-                <input class="btn btn-sm btn-primary" ng-click="expandTimeline = !expandTimeline;" value="{{expandTimeline ? 'hide' : 'show'}}" type="button">
-                <!-- <input class="btn btn-sm btn-primary" ng-click="changeAll();" value = "{{changeAllExpanded ? 'Close menu' : 'Change all'}}" type="button">
-                <div class="changeAll" ng-class="{active: changeAllExpanded}"></div> -->
+                <button class="btn btn-sm btn-primary" ng-click="expandTimeline = !expandTimeline;" type="button">
+                <span class="glyphicon glyphicon-resize-vertical"></span>
+                {{expandTimeline ? 'hide' : 'show'}}
+                </button>
                 <div class="videoTime">
                     <span class="glyphicon glyphicon-time"></span>
                     <label>{{time}}</label>
@@ -129,16 +146,16 @@
     <div class="right">
         <div ng-controller="AssetCtrl" class="assets">
             <tabset class="assets-tabs container-fluid">
-                <tab heading="Metadata">
+                <tab active="tabs[0].active" ng-click="tabs[0].active = true" heading="Metadata">
                     <h3 class="directions" ng-hide="assets">Please select an <br> article to load.</h3>
                     <div class="assets-scroll">
-                        <div class="asset-container metadata" ng-repeat="info in assets.metadata">
+                        <div ng-click="metadataClick(info.text)" class="asset-container metadata" ng-repeat="info in assets.metadata">
                             <div class="asset-key">{{info.name}}</div>
                             <div class="asset-tooltip">{{info.text || 'unavailable'}}</div>
                         </div>
                     </div>
                 </tab>
-                <tab class="container-flud" heading="Images">
+                <tab active="tabs[1].active" ng-click="tabs[1].active = true" class="container-flud" heading="Images">
                     <h3 class="directions" ng-hide="assets">Please select an <br> article to load.</h3>
                     <div class="assets-scroll">
                         <div class="row nomargin">
@@ -148,7 +165,7 @@
                         </div>
                     </div>
                 </tab>
-                <tab heading="Quotes">
+                <tab active="tabs[2].active" ng-click="tabs[2].active = true" heading="Quotes">
                     <h3 class="directions" ng-hide="assets">Please select an <br> article to load.</h3>
                     <div class="assets-scroll">
                         <div class="quote-container asset-container" ng-repeat="quote in assets.quotes" ng-click="$parent.chooseText('“' + quote + '”')">
@@ -158,7 +175,7 @@
                         </div>
                     </div>
                 </tab>
-                <tab heading="Text" ng-controller="EditorCtrl">
+                <tab active="tabs[3].active" ng-click="tabs[3].active = true" heading="Text" ng-controller="EditorCtrl">
                     <div class="assets-scroll overlay">
                         <form ng-init="initialize()">
                             <div>
