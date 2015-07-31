@@ -57,8 +57,8 @@ angular.module('Timeline', ['TimelineService', 'cfp.hotkeys']).controller('Timel
         $scope.slides = timeline.slides;
         if ($scope.slides.length) {
             $scope.expandTimeline = true;
-            $scope.getTime();
         }
+        $scope.getTime();
     };
 
     $scope.randomKen = function (slide) {

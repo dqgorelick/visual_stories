@@ -152,14 +152,6 @@
                     </div>
                 </tab>
                 <tab heading="Text" ng-controller="EditorCtrl">
-                    <div ng-show="$parent.showCanvas" class="overlay-preview-backdrop" style="background-color:{{overlay.overlayColor}}; opacity:{{overlay.opacity}}"></div>
-                    <div ng-show="$parent.showCanvas" class="overlay-preview">
-                        <span>
-                            <h3 style="color:{{text.color}}; font-family:{{text.font}}; font-size:{{text.size}};">
-                                {{text.content}}
-                            </h3>
-                        </span>
-                    </div>
                     <input ng-show="$parent.showCanvas" class="btn btn-sm btn-primary overlay-draw" value="Draw text" type="button" ng-click="saveConfigs(true);" />
                     <div class="assets-scroll overlay">
                         <form ng-init="initialize()">
