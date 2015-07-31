@@ -156,3 +156,27 @@
 .selectedBorder{
     border:3px #4395e5 solid;
 }
+
+#timeline .videoTime{
+    position: absolute;
+    right: 10px;
+    padding-right: 10px;
+    top: 10px;
+}
+.videoTime span{
+    position: relative;
+    top: 1px;
+    display: inline;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    font-size: 20px;
+}
+.videoTime label{
+    display: inline;
+    max-width: 100%;
+    font-weight: bold;
+    font-size: 20px;
+}
+

@@ -91,6 +91,12 @@
         <div ng-controller="TimelineCtrl as loki">
             <div id="timeline" class="sliding" ng-class="{expanded: expandTimeline}">
                 <input class="btn btn-sm btn-primary" ng-click="expandTimeline = !expandTimeline;" value="{{expandTimeline ? 'hide' : 'show'}}" type="button">
+
+                <div class="videoTime">
+                    <span class="glyphicon glyphicon-time"></span>
+                    <label>{{time}}</label>
+                </div> 
+
                 <div="templates" style="display:none">
                     <img id="starter" src="assets/slides/starter.jpg">
                     <img id="ender" src="assets/slides/ender.jpg">

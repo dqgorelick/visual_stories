@@ -3,8 +3,9 @@
     THINGS TO ADD
 
         P2:
-        ken burns selection - Dan
+        ken burns selection - Dan - DONE
         show the length of the video - Jordan
+        show the length of the video - Sam
         preview doesn't work and breaks custom rects for text - Sam
 
         P3:
@@ -16,8 +17,8 @@
     BUGS TO FIX:
         P1:
         caption on two slides. - DONE
-        panning bug - Dan
-        fix timing (account for ken burns & fadeOut) - Dan
+        panning bug - Dan - DONE
+        fix timing (account for ken burns & fadeOut) - Dan - DONE
         when you drag, selected shouldn't change - Dan
         Center text appropriately- DONE
         stop? -
@@ -487,12 +488,13 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
 
         var obj = $scope.canvas._objects[0];
         if (!obj) return;
-
-        var animation = $scope.createAnimation(slide, obj);
+        var trueDuration = slide.duration - slide.fadeOut
+        console.log(trueDuration);
+        var animation = $scope.createAnimation(slide, obj, trueDuration);
 
         obj.animate(animation, {
             onChange: $scope.canvas.renderAll.bind($scope.canvas),
-            duration: slide.duration,
+            duration: trueDuration,
             onComplete: onComplete,
             abort: function() {return !$scope.playing;}
         });
@@ -510,11 +512,11 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         });
     };
 
-    $scope.createAnimation = function(slide, obj) {
+    $scope.createAnimation = function(slide, obj, duration) {
         var animation = {};
         if (slide.fadeIn) {
             obj.opacity = 0;
-            animation['opacity'] = slide.duration / slide.fadeIn;
+            animation['opacity'] = duration / slide.fadeIn;
         }
         switch (slide.kenBurns) {
             case 0:
