@@ -47,16 +47,12 @@ angular.module('Editor', ['ConfigService']).controller('EditorCtrl', function($s
     }
 
     $scope.autoPositions = [
-        {value: false, label:'none'},
-        {value:"tb", label:'top banner'},
-        {value:"tli", label:'top left inset'},
-        {value:"tri", label:'top right inset'},
-        {value:"cb", label:'centered banner'},
-        {value:"bli", label:'bottom left inset'},
-        {value:"bri", label:'bottom right inset'},
-        {value:"bb", label:'bottom banner'}
+        'banner',
+        'default',
+        'none'
     ];
-    $scope.autoPosition = $scope.autoPositions[7];
+
+    $scope.autoPosition = $scope.autoPositions[1];
     $scope.manualPosition = [0, 0, 0, 0];
 
     $scope.overlay = {
@@ -74,6 +70,35 @@ angular.module('Editor', ['ConfigService']).controller('EditorCtrl', function($s
         justify: 'center',
         compensateHeightOnWrap: false
     };
+
+    $scope.drawText = function() {
+        var text = new fabric.IText($scope.text.content, {
+            size: $scope.text.size,
+            fontFamily: $scope.text.font,
+            fill: '#ffffff',
+        });
+        $scope.$parent.canvas.add(text);
+        text.center();
+        text.setCoords();
+
+        var overlayOptions = _.extend($scope.overlay, text.getBoundingRect());
+        console.log($scope.autoPosition);
+        switch ($scope.autoPosition) {
+            case 'banner':
+                overlayOptions.left = 0;
+                overlayOptions.width = $scope.$parent.canvas_width;
+            case 'default':
+                var rect = $scope.$parent.createOverlay(null, overlayOptions);
+                $scope.$parent.canvas.add(rect);
+                $scope.$parent.canvas.sendBackwards(rect);
+                $scope.$parent.canvas.renderAll();
+                break;
+            case 'none':
+                break;
+        }
+
+        $scope.qUndo();
+    }
 
     $scope.saveConfigs = function(draw) {
         var position;
@@ -95,7 +120,6 @@ angular.module('Editor', ['ConfigService']).controller('EditorCtrl', function($s
             $scope.qUndo();
         }
     }
-
 });
 
 function getRectangle(type, width, height) {

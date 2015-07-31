@@ -4,8 +4,9 @@
 
         P2:
         ken burns selection - Dan - DONE
-        show the length of the video - Jordan
-        show the length of the video - Sam
+        show the length of the video - Jordan DONE
+        show the length of the video - Sam DONE
+        populate text from metadata
         preview doesn't work and breaks custom rects for text - Sam
 
         P3:
@@ -170,10 +171,10 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
 
     $scope.createOverlay = function(rect, options) {
         var rectangle = new fabric.Rect({
-            left: rect[0],
-            top: rect[1],
-            width: rect[2],
-            height: rect[3],
+            left: rect ? rect[0] : options.left,
+            top: rect ? rect[1]: options.top ,
+            width: rect ? rect[2] : options.width,
+            height: rect ? rect[3] : options.height,
             fill: options.overlayColor,
             opacity: options.opacity || 1
         });

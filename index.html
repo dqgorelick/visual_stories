@@ -32,7 +32,7 @@
         <div id="modalPage">
             <div id="modalWrapper">
                 <img src="./assets/slides/logo.png"><br>
-                <h1 class="navbar-left karnak" >Times Trailers</h1>
+                <h1 class="navbar-left karnak" >Times Trailer</h1>
                 <form ng-submit="$parent.getArticle()" id="search" class="navbar-right input-group input-group-lg row-fluid">
                     <input autofocus ng-model="$parent.url" type="text" class="form-control karnak" placeholder="Enter article URL here">
                     <button type="submit" class="input-group-addon btn btn-lg"><span class="glyphicon glyphicon-search"></span></button>
@@ -95,7 +95,7 @@
                 <div class="videoTime">
                     <span class="glyphicon glyphicon-time"></span>
                     <label>{{time}}</label>
-                </div> 
+                </div>
 
                 <div="templates" style="display:none">
                     <img id="starter" src="assets/slides/starter.jpg">
@@ -158,7 +158,6 @@
                     </div>
                 </tab>
                 <tab heading="Text" ng-controller="EditorCtrl">
-                    <input ng-show="$parent.showCanvas" class="btn btn-sm btn-primary overlay-draw" value="Draw text" type="button" ng-click="saveConfigs(true);" />
                     <div class="assets-scroll overlay">
                         <form ng-init="initialize()">
                             <div>
@@ -167,15 +166,14 @@
                                     <div class="form-group form-inline">
                                         <label class="control-label overlay-label">Text</label>
                                         <input class="form-control" ng-model="text.content" placeholder="text here" id="text-content" type="text"/>
+                                        <input class="btn btn-sm btn-primary" value="Draw text" type="button" ng-click="drawText()" />
                                     </div>
                                     <div class="form-group form-inline">
                                         <label class="control-label overlay-label">Size</label>
                                         <input class="form-control" ng-model="text.size" placeholder="font-size" id="font-size" type="number" />
-                                    </div>
-                                    <div class="form-group form-inline">
                                         <div id="font-button" dropdown dropdown-append-to-body>
                                             <label class="control-label overlay-label">Font</label>
-                                            <button class="btn btn-sm btn-muted" dropdown-toggle class="dropdown">Choose Font</button>
+                                            <button class="btn btn-sm btn-muted" dropdown-toggle class="dropdown" style="font-family:{{text.font}}">Choose Font</button>
                                             <ul role="menu" class="dropdown-menu" id="font-holder">
                                                 <li ng-repeat="font in fonts" id="{{font}}" class="font-family" ng-class="{'active': font == text.font}" style="font-family:{{font}}" ng-click="text.font = font">{{font}}</li>
                                             </ul>
@@ -184,49 +182,21 @@
                                     <div class="form-group">
                                         <input class="form-control overlay-color" ng-model="text.color" type="color" id="text-color"/>
                                     </div>
-                                </fieldset>
-                                <fieldset class="editor">
-                                    <legend>Overlay<span class="overlay-checkbox">enable/disable</span><input ng-model="overlay.enabled" id="overlay" type="checkbox" /></legend>
                                     <div class="form-group form-inline">
-                                        <label class="control-label overlay-label">Auto</label>
-                                        <select class="form-control" ng-model="autoPosition" ng-options="option.label for option in autoPositions track by option.value" id="position">
+                                        <label class="control-label overlay-label">Overlay</label>
+                                        <select class="form-control" ng-model="autoPosition" ng-options="option for option in autoPositions" id="position">
                                         </select>
+                                        <input class="form-control overlay-color" ng-model="overlay.overlayColor" type="color" id="overlay-color">
                                     </div>
                                     <div class="form-group form-inline">
                                         <label class="control-label overlay-label">Opacity</label>
                                         <input class="form-control" ng-model="overlay.opacity" type="number" min="0" max="1" id="overlay-opacity" step=".1">
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-group">
-                                            <input class="form-control overlay-color" ng-model="overlay.overlayColor" type="color" id="overlay-color">
-                                        </div>
-                                    </div>
-                                    <div id="size" class="form-group form-inline">
-                                        <label class="control-label overlay-label">X</label>
-                                        <input class="form-control overlay-input" ng-model="manualPosition[0]" type="number" id="manual-x">
-                                        <label class="control-label overlay-label">Y</label>
-                                        <input class="form-control overlay-input" ng-model="manualPosition[1]" type="number" id="manual-y">
-                                        <br>
-                                        <label class="control-label overlay-label">Width</label>
-                                        <input class="form-control overlay-input" ng-model="manualPosition[2]" id="width" type="text" placeholder="width">
-                                        <label class="control-label overlay-label">Height</label>
-                                        <input class="form-control overlay-input" ng-model="manualPosition[3]" id="height" type="text" placeholder="height">
                                     </div>
                                 </fieldset>
                             </div>
                         </form>
                     </div>
                 </tab>
-                <tab class="container-flud" heading="Stock Slides">
-                    <div class="assets-scroll">
-                        <div class="row nomargin">
-                            <div class=" col-md-4 asset-container" ng-repeat="(index, image) in $parent.defaultSlides">
-                                <img class="thumbnail" crossorigin="anonymous" ng-click="$parent.chooseImage(image.name)" id="default{{index}}" ng-src="{{image.url}}">
-                            </div>
-                        </div>
-                    </div>
-                </tab>
-
             </tabset>
         </div>
     </div>
