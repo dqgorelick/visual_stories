@@ -81,14 +81,19 @@ body{
         Welcome Portal
 *******************************/
 /*outside*/
-.openModal,.generateSlides{
+.openModal{
     position:absolute;
     right:20px;
     top:6px;
 }
 
-.generateSlides{
-    right:157px;
+.openModal:before{
+    content: "'?' for keybinds";
+    position: absolute;
+    font-size: 14px;
+    top: 9px;
+    left: -122px;
+    color: #7F7F7F;
 }
 
 #modalPage {

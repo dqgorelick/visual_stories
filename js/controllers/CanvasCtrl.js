@@ -310,8 +310,9 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     $scope.createStarterSlide = function() {
         $scope.chooseImage("starter", true);
         var starter = Config.defaultSlide($scope.saveSlide());
-        starter.duration = 1000;
-        starter.fadeOut = true;
+        starter.duration = 1500;
+        starter.fadeIn = 1000;
+        starter.fadeOut = false;
         starter.kenBurns = 0;
         $scope.canvas.clear();
         return starter;
@@ -390,6 +391,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         $scope.chooseImage("ender", true);
         var ender = Config.defaultSlide($scope.saveSlide());
         ender.kenBurns = 0;
+        ender.duration = 1500;
         $scope.clearCanvas();
         return ender;
 
