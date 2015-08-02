@@ -1,15 +1,66 @@
-angular.module('Timeline', ['TimelineService', 'cfp.hotkeys']).controller('TimelineCtrl', function($scope, timeline, hotkeys) {
+angular.module('Timeline', ['TimelineService', 'ConfigService', 'cfp.hotkeys']).controller('TimelineCtrl', function($scope, timeline, hotkeys, Config) {
     var count = localStorage.length;
     $scope.slides = [];
     $scope.expandTimeline = false;
     $scope.time = '0 seconds';
+    $scope.initialLoad = false;
+    $scope.lastSlide = -1;
+    $scope.lastTimeline = [];
+
+    $scope.setLastSlide = function(index){
+    	if(index == $scope.lastSlide){
+    	    $scope.lastSlide = -1;
+    	} else {
+    	    $scope.lastSlide = index;
+    	}
+    };
+
+    $scope.setLastTimeline = function(){
+    	$scope.lastTimeline = [];
+    	timeline.slides.forEach(function(data, it){
+    		$scope.lastTimeline[it] = data;
+    	});
+    };
+
+    $scope.$on("addSlide", function(){
+        $scope.fillSlides();
+        $scope.setLastTimeline();
+        var data = Config.defaultSlide($scope.saveSlide());
+        console.log("lastTimeline being set", $scope.lastTimeline);
+        if($scope.lastSlide >= 0) {
+            timeline.slides[$scope.lastSlide] = data;
+        } else {
+        	// doesn't add slide first time page loads
+        	if(!$scope.initialLoad) {
+        		$scope.initialLoad = true;
+        	} else {
+        		timeline.slides.push(data);
+        	}
+        }
+        $scope.lastSlide = -1;
+    });
+
+
+    this.dropCallback = function(event, ui, title, $index) {
+    	$scope.lastSlide = $index;
+    	var movedSlide = timeline.slides[$index];
+    	$scope.lastTimeline.forEach(function(data, it){
+    		if(data === movedSlide){
+    			$scope.lastTimeline.splice(it,1);
+    			$scope.lastTimeline.splice($index,0,movedSlide);
+    		}
+    	});
+    	timeline.slides = $scope.lastTimeline;
+    	$scope.slides = $scope.lastTimeline;
+    	$scope.setLastTimeline();
+    };
 
     $scope.getTime = function() {
         var time = _.reduce($scope.slides, function(memo, slide) {
             return memo + slide.duration;
         }, 0);
         $scope.time = time / 1000 + ' seconds';
-    }
+    };
 
     hotkeys.add({
         combo: 't',
@@ -31,9 +82,6 @@ angular.module('Timeline', ['TimelineService', 'cfp.hotkeys']).controller('Timel
         localStorage.clear();
     };
 
-    $scope.$on("newSlides", function(){
-        $scope.fillSlides();
-    })
 
     $scope.durations = [
         {value: 500, label: '0.5 secs'},
@@ -68,7 +116,7 @@ angular.module('Timeline', ['TimelineService', 'cfp.hotkeys']).controller('Timel
     $scope.removeSlide = function(index){
     	timeline.slides.splice(index, 1);
         $scope.getTime();
-    }
+    };
 
     $scope.effectIndex = -1;
     $scope.effectShow = function(index){
@@ -86,6 +134,4 @@ angular.module('Timeline', ['TimelineService', 'cfp.hotkeys']).controller('Timel
 
     $scope.changeAllExpanded = false;
 
-    this.dropCallback = function(event, ui, title, $index) {
-    };
 });

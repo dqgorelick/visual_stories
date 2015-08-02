@@ -103,7 +103,7 @@
                <div id="finished">
                </div>
             </div>
-            <input ng-show="showCanvas" class="btn btn-sm btn-primary addSlide" ng-click="addSlide(); $broadcast('newSlides'); " value="Add slide" type="button">
+            <input ng-show="showCanvas" class="btn btn-sm btn-primary addSlide" ng-click="$broadcast('addSlide'); " value="Add slide" type="button">
         <div ng-controller="TimelineCtrl as loki">
             <div id="timeline" class="sliding" ng-class="{expanded: expandTimeline}">
                 <button class="btn btn-sm btn-primary" ng-click="expandTimeline = !expandTimeline;" type="button">
@@ -121,12 +121,12 @@
                 </div="templates">
                 <div class="slideWrapper">
                     <ul class="row-fluid no-overflow">
-                        <li class="slideView" ng-repeat="item in slides" data-drop="true" ng-model='slides' jqyoui-droppable="{index: {{$index}}, onDrop: 'loki.dropCallback(item.title, $index); $parent.lastChosen = -1'}" ng-init="addTime(item.duration)">
+                        <li class="slideView" ng-repeat="item in slides" data-drop="true" ng-model='slides' jqyoui-droppable="{index: {{$index}}, onDrop: 'loki.dropCallback(item.title, $index);'}" ng-init="addTime(item.duration)">
                             <div class="element" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" ng-model="slides" jqyoui-draggable="{index: {{$index}}}">
                                 <div class="element-cutoff">
-                                    <img class="ng-binding" src="{{item.thumb}}" ng-click="$parent.restoreSlide($index)" ng-class="{selectedBorder: $index == lastChosen}">
+                                    <img class="ng-binding" src="{{item.thumb}}" ng-click="$parent.restoreSlide($index); setLastSlide($index);" ng-class="{selectedBorder: $index == lastSlide}">
                                 </div>
-                                <button type="button" class="remove btn btn-danger btn-xs" ng-click="removeSlide($index);">X</button>
+                                <button type="button" class="remove btn btn-muted btn-xs" ng-click="removeSlide($index);">X</button>
                                 <select ng-change="getTime()" class="form-control duration" ng-model="item.duration" ng-options="option.value as option.label for option in durations"></select>
                                 <button type="button" class="effects btn btn-success btn-xs" ng-click="effectShow($index);">fx</button>
                                 <div class="effect-controller" ng-class="{active: $index == effectIndex}">

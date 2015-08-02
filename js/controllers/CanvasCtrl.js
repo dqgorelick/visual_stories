@@ -11,6 +11,7 @@
 
         P3:
         Put it on a server
+        Error message if article chosen is interactive or other
         Share buttons
 
         P4:
@@ -25,9 +26,9 @@
         caption on two slides. - DONE
         panning bug - Dan - DONE
         fix timing (account for ken burns & fadeOut) - Dan - DONE
-        when you drag, selected shouldn't change - Dan
+        when you drag, selected shouldn't change - Dan - DONE
         Center text appropriately- DONE
-        stop? -
+        stop? - DONE?
 */
 
 angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'cfp.hotkeys']).controller('CanvasCtrl', function($scope, Config, assets, timeline, hotkeys) {
@@ -265,8 +266,6 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     /***************************
     **   Loading Slides       **
     ***************************/
-    $scope.lastChosen = -1;
-
 
     $scope.saveSlide = function(){
         var saved = $scope.canvas.toJSON();
@@ -280,12 +279,6 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
             $scope.canvas.renderAll();
             $scope.qUndo();
         })
-        if(index == $scope.lastChosen){
-            $scope.lastChosen = -1;
-            $scope.clearCanvas();
-        } else {
-            $scope.lastChosen = index;
-        }
     };
 
 
@@ -313,15 +306,6 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     /***************************
     **  Creating Slides       **
     ***************************/
-    $scope.addSlide = function(){
-        var data = Config.defaultSlide($scope.saveSlide());
-        if($scope.lastChosen >= 0) {
-            timeline.slides[$scope.lastChosen] = data;
-        } else {
-            timeline.slides.push(data);
-        }
-        $scope.lastChosen = -1;
-    };
 
     $scope.createStarterSlide = function() {
         $scope.chooseImage("starter", true);
@@ -437,7 +421,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
             }
 
             timeline.slides.push($scope.generateEndingSlide());
-            $scope.$broadcast('newSlides');
+            $scope.$broadcast('addSlide');
         });
     };
 
