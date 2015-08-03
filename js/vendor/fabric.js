@@ -10434,11 +10434,14 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
     this.renderOnAddRemove = false;
 
     fabric.util.enlivenObjects(objects, function(enlivenedObjects) {
-      enlivenedObjects.forEach(function(obj, index) {
-        var objects = _this.getObjects();
-        if (removeExisting && objects[index]) {
-          objects[index].remove();
+      if (removeExisting) {
+        var existing = _this.getObjects();
+        for (var i = 0; i < existing.length; i++) {
+          existing[i].remove();
         }
+      }
+
+      enlivenedObjects.forEach(function(obj, index) {
         _this.insertAt(obj, index, true);
       });
 
