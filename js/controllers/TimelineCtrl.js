@@ -26,7 +26,6 @@ angular.module('Timeline', ['TimelineService', 'ConfigService', 'cfp.hotkeys']).
         $scope.fillSlides();
         $scope.setLastTimeline();
         var data = Config.defaultSlide($scope.saveSlide());
-        console.log("lastTimeline being set", $scope.lastTimeline);
         if($scope.lastSlide >= 0) {
             timeline.slides[$scope.lastSlide] = data;
         } else {

@@ -273,12 +273,21 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         return saved;
     };
 
+    $scope.lastRestored = -1;
+
     $scope.restoreSlide = function(index){
-        $scope.clearCanvas();
-        $scope.loadSlide(index, function() {
-            $scope.canvas.renderAll();
-            $scope.qUndo();
-        })
+        console.log("called!");
+        $scope.canvas.clear();
+        if ($scope.lastRestored != index){
+            $scope.loadSlide(index, function() {
+                $scope.canvas.renderAll();
+                $scope.qUndo();
+            })
+            $scope.lastRestored = index;
+        } else {
+            $scope.lastRestored = -1;
+        }
+
     };
 
 

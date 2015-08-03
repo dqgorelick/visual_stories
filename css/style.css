@@ -87,12 +87,10 @@ body{
     top:6px;
 }
 
-.openModal:before{
-    content: "'?' for keybinds";
+.keybindings{
     position: absolute;
-    font-size: 14px;
-    top: 9px;
-    left: -122px;
+    right: 160px;
+    top: 14px;
     color: #7F7F7F;
 }
 

@@ -129,10 +129,24 @@
     display: inline-block;
     height: 120px;
     width: 120px;
-    margin: 10px;
+    margin: 10px 12px 10px 12px;
     line-height: 20px;
 }
 
+.slideView:before{
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-top: 18px solid transparent;
+    border-bottom: 18px solid transparent;
+    border-left: 14px solid #1D1F21;
+    margin-left: -20px;
+    margin-top: 19px;
+}
+.slideView:nth-child(1):before{
+    display:none;
+}
 .slideWrapper{
     position:absolute;
     width: 100%;
