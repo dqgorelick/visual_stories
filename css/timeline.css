@@ -136,6 +136,7 @@
 }
 
 .slideView:before{
+    display:none;
     content: "";
     width: 0;
     height: 0;

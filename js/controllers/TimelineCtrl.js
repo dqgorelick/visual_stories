@@ -131,7 +131,5 @@ angular.module('Timeline', ['TimelineService', 'ConfigService', 'cfp.hotkeys']).
         $scope.changeAllExpanded = !$scope.changeAllExpanded;
         console.log("working", $scope.changeAllExpanded);
     };
-
     $scope.changeAllExpanded = false;
-
 });
