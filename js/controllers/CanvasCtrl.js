@@ -23,6 +23,8 @@
 
     BUGS TO FIX:
         P1:
+        MAKE FONTS WORK for people testing app on the server
+        Make fonts work for Firefox and Safi as well
         caption on two slides. - DONE
         panning bug - Dan - DONE
         fix timing (account for ken burns & fadeOut) - Dan - DONE
