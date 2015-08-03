@@ -2,10 +2,10 @@ angular.module('ConfigService', []).factory('Config', [function() {
     var configs = {};
 
     var settings = {
-        duration: 2000,
+        duration: 2500,
         fadeOut: 0,
         fadeIn: 0,
-        kenBurns: 5,
+        kenBurns: 0,
         recording: true,
         width: 600,
         height: 400

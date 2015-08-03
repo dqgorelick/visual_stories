@@ -323,7 +323,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         var starter = Config.defaultSlide($scope.saveSlide());
         starter.duration = 1500;
         starter.fadeIn = 1000;
-        starter.fadeOut = false;
+        starter.fadeOut = 0;
         starter.kenBurns = 0;
         $scope.canvas.clear();
         return starter;
@@ -352,6 +352,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         $scope.chooseText(headline, headlineStyle, headlinePosition, true);
         $scope.chooseText(byline, bylineStyle, bylinePosition, true);
         var headliner = Config.defaultSlide($scope.saveSlide());
+        headliner.fadeIn = 1000;
         headliner.kenBurns = 0;
         $scope.clearCanvas();
         return headliner;

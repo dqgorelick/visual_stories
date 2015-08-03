@@ -22,7 +22,7 @@ angular.module('Timeline', ['TimelineService', 'ConfigService', 'cfp.hotkeys']).
     	});
     };
 
-    $scope.$on("addSlide", function(){
+    $scope.$on("addSlide", function() {
         $scope.fillSlides();
         var data = Config.defaultSlide($scope.saveSlide());
         if($scope.lastSlide >= 0) {
