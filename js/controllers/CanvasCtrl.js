@@ -157,7 +157,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         options = _.defaults(options || {}, {
             content: string,
             color: '#ffffff',
-            font: 'NYTCheltenhamExtBd',
+            font: 'NYTCheltenhamExtBd-Regular',
             fontStyle: 'italic',
             size: 40,
             justify: 'center',

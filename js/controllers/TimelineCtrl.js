@@ -24,7 +24,6 @@ angular.module('Timeline', ['TimelineService', 'ConfigService', 'cfp.hotkeys']).
 
     $scope.$on("addSlide", function(){
         $scope.fillSlides();
-        $scope.setLastTimeline();
         var data = Config.defaultSlide($scope.saveSlide());
         if($scope.lastSlide >= 0) {
             timeline.slides[$scope.lastSlide] = data;
@@ -37,6 +36,7 @@ angular.module('Timeline', ['TimelineService', 'ConfigService', 'cfp.hotkeys']).
         	}
         }
         $scope.lastSlide = -1;
+        $scope.setLastTimeline();
     });
 
 
@@ -115,6 +115,7 @@ angular.module('Timeline', ['TimelineService', 'ConfigService', 'cfp.hotkeys']).
     $scope.removeSlide = function(index){
     	timeline.slides.splice(index, 1);
         $scope.getTime();
+        $scope.setLastTimeline();
     };
 
     $scope.effectIndex = -1;

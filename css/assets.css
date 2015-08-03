@@ -34,7 +34,7 @@
 }
 
 .quote {
-    font-family: NYTCheltenhamExtBd;
+    font-family: NYTCheltenhamExtBd-Regular;
     font-style: italic;
     font-size: 30px;
     background-color: black;
@@ -52,11 +52,11 @@
 }
 
 .asset-key {
-    font-family: NYTFranklinBold;
+    font-family: NYTFranklinBold-Regular;
 }
 
 .asset-tooltip {
-    font-family: NYTFranklinLight;
+    font-family: NYTFranklinLight-Regular;
 }
 
 .metadata {

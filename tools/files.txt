@@ -1,24 +1,167 @@
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTCheltenhamBdCon' value='NYTCheltenhamBdCon'>NYTCheltenhamBdCon</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTCheltenhamBdXCon' value='NYTCheltenhamBdXCon'>NYTCheltenhamBdXCon</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTCheltenhamBold' value='NYTCheltenhamBold'>NYTCheltenhamBold</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTCheltenhamBook' value='NYTCheltenhamBook'>NYTCheltenhamBook</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTCheltenhamExtBd' value='NYTCheltenhamExtBd'>NYTCheltenhamExtBd</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTCheltenhamExtLt' value='NYTCheltenhamExtLt'>NYTCheltenhamExtLt</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTCheltenhamLt' value='NYTCheltenhamLt'>NYTCheltenhamLt</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTCheltenhamLtCon' value='NYTCheltenhamLtCon'>NYTCheltenhamLtCon</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTCheltenhamLtSC' value='NYTCheltenhamLtSC'>NYTCheltenhamLtSC</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTCheltenhamMedCon' value='NYTCheltenhamMedCon'>NYTCheltenhamMedCon</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTCheltenhamMedium' value='NYTCheltenhamMedium'>NYTCheltenhamMedium</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTCheltenhamWide' value='NYTCheltenhamWide'>NYTCheltenhamWide</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTFranklinBold' value='NYTFranklinBold'>NYTFranklinBold</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTFranklinExtraBd' value='NYTFranklinExtraBd'>NYTFranklinExtraBd</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTFranklinHeadline' value='NYTFranklinHeadline'>NYTFranklinHeadline</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTFranklinLight' value='NYTFranklinLight'>NYTFranklinLight</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTFranklinMedium' value='NYTFranklinMedium'>NYTFranklinMedium</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTFranklinSemiBold' value='NYTFranklinSemiBold'>NYTFranklinSemiBold</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTImperial' value='NYTImperial'>NYTImperial</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTImperialSemiBold' value='NYTImperialSemiBold'>NYTImperialSemiBold</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTKarnakDisplay' value='NYTKarnakDisplay'>NYTKarnakDisplay</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTKarnakText' value='NYTKarnakText'>NYTKarnakText</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTStymieLight' value='NYTStymieLight'>NYTStymieLight</div>
-<div class='font-family' onclick='selectFont(this)' style='font-family:NYTStymieMedium' value='NYTStymieMedium'>NYTStymieMedium</div>
+@font-face {
+	font-family: '.DS_S';
+	src: url('./fonts/.DS_Store')
+}
+@font-face {
+	font-family: 'NYTCheltenhamBdCon-Regular';
+	src: url('./fonts/NYTCheltenhamBdCon-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamBdXCon-Regular';
+	src: url('./fonts/NYTCheltenhamBdXCon-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamBold-Italic';
+	src: url('./fonts/NYTCheltenhamBold-Italic.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamBold-Regular';
+	src: url('./fonts/NYTCheltenhamBold-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamBook-Italic';
+	src: url('./fonts/NYTCheltenhamBook-Italic.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamBook-Regular';
+	src: url('./fonts/NYTCheltenhamBook-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamExtBd-Italic';
+	src: url('./fonts/NYTCheltenhamExtBd-Italic.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamExtBd-Regular';
+	src: url('./fonts/NYTCheltenhamExtBd-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamExtLt-Italic';
+	src: url('./fonts/NYTCheltenhamExtLt-Italic.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamExtLt-Regular';
+	src: url('./fonts/NYTCheltenhamExtLt-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamLt-Italic';
+	src: url('./fonts/NYTCheltenhamLt-Italic.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamLt-Regular';
+	src: url('./fonts/NYTCheltenhamLt-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamLtCon-Regular';
+	src: url('./fonts/NYTCheltenhamLtCon-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamLtSC-Regular';
+	src: url('./fonts/NYTCheltenhamLtSC-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamMedCon-Regular';
+	src: url('./fonts/NYTCheltenhamMedCon-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamMedium-Italic';
+	src: url('./fonts/NYTCheltenhamMedium-Italic.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamMedium-Regular';
+	src: url('./fonts/NYTCheltenhamMedium-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamWide-Italic';
+	src: url('./fonts/NYTCheltenhamWide-Italic.ttf')
+}
+@font-face {
+	font-family: 'NYTCheltenhamWide-Regular';
+	src: url('./fonts/NYTCheltenhamWide-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTFranklinBold-Italic';
+	src: url('./fonts/NYTFranklinBold-Italic.ttf')
+}
+@font-face {
+	font-family: 'NYTFranklinBold-Regular';
+	src: url('./fonts/NYTFranklinBold-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTFranklinExtraBd-Italic';
+	src: url('./fonts/NYTFranklinExtraBd-Italic.ttf')
+}
+@font-face {
+	font-family: 'NYTFranklinExtraBd-Regular';
+	src: url('./fonts/NYTFranklinExtraBd-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTFranklinHeadline-Italic';
+	src: url('./fonts/NYTFranklinHeadline-Italic.ttf')
+}
+@font-face {
+	font-family: 'NYTFranklinHeadline-Regular';
+	src: url('./fonts/NYTFranklinHeadline-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTFranklinLight-Italic';
+	src: url('./fonts/NYTFranklinLight-Italic.ttf')
+}
+@font-face {
+	font-family: 'NYTFranklinLight-Regular';
+	src: url('./fonts/NYTFranklinLight-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTFranklinMedium-Italic';
+	src: url('./fonts/NYTFranklinMedium-Italic.ttf')
+}
+@font-face {
+	font-family: 'NYTFranklinMedium-Regular';
+	src: url('./fonts/NYTFranklinMedium-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTFranklinSemiBold-Regular';
+	src: url('./fonts/NYTFranklinSemiBold-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTImperial-Bold';
+	src: url('./fonts/NYTImperial-Bold.ttf')
+}
+@font-face {
+	font-family: 'NYTImperial-BoldItalic';
+	src: url('./fonts/NYTImperial-BoldItalic.ttf')
+}
+@font-face {
+	font-family: 'NYTImperial-Italic';
+	src: url('./fonts/NYTImperial-Italic.ttf')
+}
+@font-face {
+	font-family: 'NYTImperial-Regular';
+	src: url('./fonts/NYTImperial-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTImperialSemiBold-Italic';
+	src: url('./fonts/NYTImperialSemiBold-Italic.ttf')
+}
+@font-face {
+	font-family: 'NYTImperialSemiBold-Regular';
+	src: url('./fonts/NYTImperialSemiBold-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTKarnakDisplay-Regular';
+	src: url('./fonts/NYTKarnakDisplay-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTKarnakText-Regular';
+	src: url('./fonts/NYTKarnakText-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTStymieLight-Regular';
+	src: url('./fonts/NYTStymieLight-Regular.ttf')
+}
+@font-face {
+	font-family: 'NYTStymieMedium-Regular';
+	src: url('./fonts/NYTStymieMedium-Regular.ttf')
+}
+
+-------------Editor-------------
+['NYTCheltenhamBdCon-Regular', 'NYTCheltenhamBdXCon-Regular', 'NYTCheltenhamBold-Italic', 'NYTCheltenhamBold-Regular', 'NYTCheltenhamBook-Italic', 'NYTCheltenhamBook-Regular', 'NYTCheltenhamExtBd-Italic', 'NYTCheltenhamExtBd-Regular', 'NYTCheltenhamExtLt-Italic', 'NYTCheltenhamExtLt-Regular', 'NYTCheltenhamLt-Italic', 'NYTCheltenhamLt-Regular', 'NYTCheltenhamLtCon-Regular', 'NYTCheltenhamLtSC-Regular', 'NYTCheltenhamMedCon-Regular', 'NYTCheltenhamMedium-Italic', 'NYTCheltenhamMedium-Regular', 'NYTCheltenhamWide-Italic', 'NYTCheltenhamWide-Regular', 'NYTFranklinBold-Italic', 'NYTFranklinBold-Regular', 'NYTFranklinExtraBd-Italic', 'NYTFranklinExtraBd-Regular', 'NYTFranklinHeadline-Italic', 'NYTFranklinHeadline-Regular', 'NYTFranklinLight-Italic', 'NYTFranklinLight-Regular', 'NYTFranklinMedium-Italic', 'NYTFranklinMedium-Regular', 'NYTFranklinSemiBold-Regular', 'NYTImperial-Bold', 'NYTImperial-BoldItalic', 'NYTImperial-Italic', 'NYTImperial-Regular', 'NYTImperialSemiBold-Italic', 'NYTImperialSemiBold-Regular', 'NYTKarnakDisplay-Regular', 'NYTKarnakText-Regular', 'NYTStymieLight-Regular', 'NYTStymieMedium-Regular']
