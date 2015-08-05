@@ -6,6 +6,8 @@ var port 			= process.env.PORT || 8080;
 var router 			= express.Router();
 var ffmpeg 			= require('fluent-ffmpeg');
 var request         = require("request");
+var multer          = require('multer');
+var Busboy          = require('busboy');
 
 // //middleware
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -25,6 +27,21 @@ router.route('/*')
             res.send(JSON.parse(body));
         });
 	});
+    .post(function (req, res) {
+        var busboy = new Busboy({ headers: req.headers });
+        busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+          var saveTo = path.join('.', filename);
+          console.log('Uploading: ' + saveTo);
+          file.pipe(fs.createWriteStream(saveTo));
+        });
+        busboy.on('finish', function() {
+          console.log('Upload complete');
+          res.writeHead(200, { 'Connection': 'close' });
+          res.end("File uploaded!");
+          console.log();
+        });
+        var finished = req.pipe(busboy);
+
 
 
 var username = 'human';
