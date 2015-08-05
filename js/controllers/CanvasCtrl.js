@@ -20,6 +20,14 @@
         gif export is slow
         Make it easier to create rectangles
 
+        P5:
+        download w/article name as filename.
+        add slide change to be save slide.
+        quotes with overlays by default
+        quotes itext
+        automatic align
+
+
 
     BUGS TO FIX:
         P1:
@@ -31,6 +39,13 @@
         when you drag, selected shouldn't change - Dan - DONE
         Center text appropriately- DONE
         stop? - DONE?
+
+
+        P6:
+        fix removing.
+        timeline selection/override bugs
+        don't append video on second run through
+
 */
 
 angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'cfp.hotkeys']).controller('CanvasCtrl', function($scope, Config, assets, timeline, hotkeys) {

@@ -9,3 +9,6 @@ On every frame:
 save frame
 every 60 frames:
 post as video
+http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
+```ffmpeg -i pastversion.webm pastversion.mp4```
+```./giffify.sh pastversion.mp4 pastversion.gif```
