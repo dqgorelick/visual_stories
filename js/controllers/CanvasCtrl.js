@@ -48,25 +48,26 @@
 
 */
 
-angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'cfp.hotkeys']).controller('CanvasCtrl', function($scope, Config, assets, timeline, hotkeys) {
+angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'cfp.hotkeys', 'UploadService']).controller('CanvasCtrl', function($scope, Config, assets, timeline, hotkeys, uploader) {
 
     $scope.canvas = null;
     $scope.canvas_width = 600;
-    $scope.canvas_height = 337.5;
+    $scope.canvas_height = 338;
     $scope.video = null;
     $scope.showCanvas = true;
     $scope.defaultSlides = [];
     $scope.continueRender = true;
     $scope.writingGIF = 0;
     $scope.playing = false;
+    $scope.renderedVideo = {src: null, link: null, mp4src: null, mp4link: null};
 
 
-    $scope.convertToGIF = function(){
+    $scope.convertToGIF = function() {
         gifshot.createGIF({
             gifWidth: 600,
             gifHeight: 338,
             video: [
-                $('#download-link').attr('href')
+                $scope.renderedVideo.src
             ],
             interval: 20,
             numFrames: 20,
@@ -84,12 +85,16 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         });
     };
 
+    $scope.resetVideo = function() {
+        $scope.video = new Whammy.Video(15);
+    }
+
     $scope.initialize = function() {
         $scope.canvas = new fabric.Canvas('canvas', {
             backgroundColor: '#000000'
         });
+        $scope.resetVideo();
         $scope.undo = [$scope.saveSlide()];
-        $scope.video = new Whammy.Video(15);
         $scope.$on('assets:ready', _.once($scope.createSlides));
     };
 
@@ -260,11 +265,14 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     $scope.finalizeVideo = function() {
         var output = $scope.video.compile();
         var link = webkitURL.createObjectURL(output);
+        $scope.renderedVideo = {
+            src: output,
+            link: link
+        };
         if ($scope.player) {
             $scope.player.destroy();
             $('#video-container').append("<div id='nyt-player'></div>");
         }
-        $('#download-link').attr('href', link);
         $scope.player = VHS.player({
             container: 'nyt-player',
             analytics: false,
@@ -276,6 +284,8 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
             autoplay: true,
             mode: "html5"
         });
+
+        $scope.resetVideo();
         $scope.showCanvas = false;
         $scope.$apply();
     };
@@ -595,5 +605,14 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         }
 
         return animation;
+    };
+
+    $scope.convertToMov = function() {
+        uploader.uploadFileToUrl($scope.renderedVideo.src, '/api',
+            function(response) {
+            console.log('success', response);
+        }, function(response) {
+            console.log('errorr', response);
+        });
     };
 });

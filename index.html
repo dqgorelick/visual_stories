@@ -23,6 +23,7 @@
     <script src='js/vendor/gifshot.js'></script>
     <script src="js/controllers/ArticleCtrl.js"></script>
     <script src="js/controllers/CanvasCtrl.js"></script>
+    <script src="js/services/UploadService.js"></script>
     <script src="js/services/ConfigService.js"></script>
     <script src="js/services/TimelineService.js"></script>
     <script src='js/services/AssetService.js'></script>
@@ -87,7 +88,7 @@
                 <input class="btn btn btn-muted" ng-click="showCanvas = !showCanvas" id="toggle" value="{{showCanvas ? 'EDITOR' : 'PLAYER'}}" type="button">
             </div>
             <div id="mediaWrapper">
-                <canvas ng-show="showCanvas" id="canvas" class="media" width="600" height="337.5"></canvas>
+                <canvas ng-show="showCanvas" id="canvas" class="media" width="600" height="338"></canvas>
                 <div ng-show="!showCanvas">
                     <div id="video-container">
                         <div class="media" id="nyt-player">
@@ -97,8 +98,11 @@
             </div>
         </div>
             <div ng-show="!showCanvas" id="socialWrapper">
-                <a id="download-link" download="example.webm" href="">
+                <a id="download-link" download="example.webm" href="{{renderedVideo.link}}">
                     <input class="btn btn-sm btn-primary" value="Download" type="button" />
+                </a>
+                <a id="download-mov" download="example.mov" href="">
+                    <input class="btn btn-sm btn-primary" value="Download As MOV" type="button" ng-click="convertToMov()">
                 </a>
                 <input class="btn btn-sm btn-primary" value="Convert to .gif" type="button" ng-click="convertToGIF()" />
                 <progressbar ng-show="writingGIF" class="progress-striped active" value="writingGIF" type="info"></progressbar>

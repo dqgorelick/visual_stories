@@ -34,4 +34,9 @@ var papi = 'http://cms-publishapi.prd.nytimes.com/v1/publish/scoop/';
 app.listen(port);
 console.log('hosting on port ' + port);
 
+function convertToMOV(file) {
+    // ffmpeg(file)
+    //  .inputFormat('webm')
 
+    // ffmpeg -i pastversion.webm pastversion.mp4
+}
