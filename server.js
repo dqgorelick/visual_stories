@@ -41,8 +41,6 @@ router.route('/*')
         var finished = req.pipe(busboy);
     });
 
-
-
 var username = 'human';
 var password = 'R3plicant';
 var papi = 'http://cms-publishapi.prd.nytimes.com/v1/publish/scoop/';
@@ -60,3 +58,4 @@ function convertToMOV(file, output, callback) {
         })
         .writeToStream(output, {end: true});
 }
+

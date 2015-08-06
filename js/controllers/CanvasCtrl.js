@@ -31,7 +31,7 @@
 
     BUGS TO FIX:
         P1:
-        MAKE FONTS WORK for people testing app on the server
+        MAKE FONTS WORK for people testing app on the server - DONE
         Make fonts work for Firefox and Safi as well
         caption on two slides. - DONE
         panning bug - Dan - DONE
@@ -42,9 +42,9 @@
 
 
         P6:
-        fix removing.
-        timeline selection/override bugs
-        don't append video on second run through
+        fix removing. - DONE
+        timeline selection/override bugs - DONE
+        don't append video on second run through - DONE
 
 */
 
@@ -303,7 +303,6 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     $scope.lastRestored = -1;
 
     $scope.restoreSlide = function(index){
-        console.log("called!");
         $scope.canvas.clear();
         if ($scope.lastRestored != index){
             $scope.loadSlide(index, function() {
@@ -524,7 +523,6 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         var obj = $scope.canvas._objects[0];
         if (!obj) return;
         var trueDuration = slide.duration - slide.fadeOut
-        console.log(trueDuration);
         var animation = $scope.createAnimation(slide, obj, trueDuration);
 
         obj.animate(animation, {

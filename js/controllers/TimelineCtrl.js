@@ -35,7 +35,6 @@ angular.module('Timeline', ['TimelineService', 'ConfigService', 'cfp.hotkeys']).
         		timeline.slides.push(data);
         	}
         }
-        $scope.lastSlide = -1;
         $scope.setLastTimeline();
     });
 
@@ -127,9 +126,9 @@ angular.module('Timeline', ['TimelineService', 'ConfigService', 'cfp.hotkeys']).
     	}
     };
 
+    //  change all feature to be added later?
     $scope.changeAll = function() {
         $scope.changeAllExpanded = !$scope.changeAllExpanded;
-        console.log("working", $scope.changeAllExpanded);
     };
     $scope.changeAllExpanded = false;
 });
