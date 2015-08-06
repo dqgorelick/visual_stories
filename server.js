@@ -50,16 +50,13 @@ var papi = 'http://cms-publishapi.prd.nytimes.com/v1/publish/scoop/';
 app.listen(port);
 console.log('hosting on port ' + port);
 
-function convertToMOV(file, output) {
-  ffmpeg(file)
-      // .videoCodec('libx264')
-      .format('mp4')
-      .outputOptions('-movflags frag_keyframe+empty_moov')
-      .on('end', function() {
-        console.log('ffmpeg done');
-    })
-    .on('error', function(err, stdout, stderr) {
+function convertToMOV(file, output, callback) {
+    ffmpeg(file)
+        .format('mp4')
+        .outputOptions('-movflags frag_keyframe+empty_moov')
+        .on('end', callback)
+        .on('error', function(err, stdout, stderr) {
         console.log(err, stdout, stderr);
-    })
-    .writeToStream(output, {end: true});
+        })
+        .writeToStream(output, {end: true});
 }
