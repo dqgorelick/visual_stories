@@ -9,6 +9,7 @@ var ffmpeg 			= require('fluent-ffmpeg');
 var request         = require("request");
 var multer          = require('multer');
 var Busboy          = require('busboy');
+var gifify          = require('gifify');
 
 // //middleware
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -19,7 +20,16 @@ app.use('/api', router);
 
 
 app.post('/convert/2gif', function (req, res) {
-    console.log('hey!');
+    var busboy = new Busboy({ headers: req.headers });
+    busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+        res.writeHead(200, {
+            "Content-Type": "image/gif"
+        });
+        convertToGIF(file, res, function() {
+          res.end();
+        });
+    });
+    var finished = req.pipe(busboy);
 });
 
 app.post('/convert/2mov', function (req, res) {
@@ -28,7 +38,6 @@ app.post('/convert/2mov', function (req, res) {
         res.writeHead(200, {
             "Content-Type": "video/mp4"
         });
-        var saveTo = 'output.mov';
         convertToMOV(file, res, function() {
           res.end();
         });
@@ -65,4 +74,8 @@ function convertToMOV(file, output, callback) {
             console.log(err, stdout, stderr);
         })
         .writeToStream(output, {end: true});
+}
+
+function convertToGIF(file, output, callback) {
+    gifify(file, {}).pipe(output);
 }
