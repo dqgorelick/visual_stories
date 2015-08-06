@@ -131,7 +131,7 @@
                         <li class="slideView" ng-repeat="item in slides" data-drop="true" ng-model='slides' jqyoui-droppable="{index: {{$index}}, onDrop: 'loki.dropCallback(item.title, $index);'}" ng-init="addTime(item.duration)">
                             <div class="element" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" ng-model="slides" jqyoui-draggable="{index: {{$index}}}">
                                 <div class="element-cutoff">
-                                    <img class="ng-binding" src="{{item.thumb}}" ng-click="$parent.restoreSlide($index); setLastSlide($index);" ng-class="{selectedBorder: $index == lastSlide}">
+                                    <img class="ng-binding" ng-src="{{item.thumb}}" ng-click="$parent.restoreSlide($index); setLastSlide($index);" ng-class="{selectedBorder: $index == lastSlide}">
                                 </div>
                                 <button type="button" class="remove btn btn-muted btn-xs" ng-click="removeSlide($index);">X</button>
                                 <select ng-change="getTime()" class="form-control duration" ng-model="item.duration" ng-options="option.value as option.label for option in durations"></select>
