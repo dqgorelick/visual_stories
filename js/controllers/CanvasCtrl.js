@@ -59,15 +59,14 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     $scope.continueRender = true;
     $scope.writingGIF = 0;
     $scope.playing = false;
-    $scope.renderedVideo = {src: null, link: null, mp4src: null, mp4link: null};
-
+    $scope.renderedVideo = null;
 
     $scope.convertToGIF = function() {
         gifshot.createGIF({
             gifWidth: 600,
             gifHeight: 338,
             video: [
-                $scope.renderedVideo.src
+                $scope.renderedVideo
             ],
             interval: 20,
             numFrames: 20,
@@ -264,11 +263,8 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
 
     $scope.finalizeVideo = function() {
         var output = $scope.video.compile();
-        var link = webkitURL.createObjectURL(output);
-        $scope.renderedVideo = {
-            src: output,
-            link: link
-        };
+        $scope.renderedVideo = output;
+        var link = (window.URL || window.webkitURL).createObjectURL(output);
         if ($scope.player) {
             $scope.player.destroy();
             $('#video-container').append("<div id='nyt-player'></div>");
@@ -605,11 +601,24 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         return animation;
     };
 
-    $scope.convertToMov = function() {
-        uploader.uploadFileToUrl($scope.renderedVideo.src, '/api')
+    $scope.downloadMov = function() {
+        uploader.uploadFileToUrl($scope.renderedVideo, '/api')
         .then(function(response) {
-          var url = (window.URL || window.webkitURL).createObjectURL(response.data);
-          window.open(url);
+          downloadFile(response.data, 'sup.mov');
         });
     };
+
+    $scope.downloadWebM = function() {
+        downloadFile($scope.renderedVideo, 'sup.webm');
+    };
+
+    $scope.downloadGIF = function() {
+        console.log('not implemented');
+        return;
+        uploader.uploadFileToUrl($scope.renderedVideo, '/api')
+        .then(function(response) {
+          downloadFile(response.data, 'sup.gif');
+        });
+    };
+
 });
