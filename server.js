@@ -16,6 +16,26 @@ app.use(bodyParser.json());
 app.use('/', express.static(__dirname+'/'));
 
 app.use('/api', router);
+
+
+app.post('/convert/2gif', function (req, res) {
+    console.log('hey!');
+});
+
+app.post('/convert/2mov', function (req, res) {
+    var busboy = new Busboy({ headers: req.headers });
+    busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+        res.writeHead(200, {
+            "Content-Type": "video/mp4"
+        });
+        var saveTo = 'output.mov';
+        convertToMOV(file, res, function() {
+          res.end();
+        });
+    });
+    var finished = req.pipe(busboy);
+});
+
 router.route('/*')
 	.get(function(req, res){
         var url = papi + req.url.split('.com/')[1].split('?')[0];
@@ -27,20 +47,7 @@ router.route('/*')
         }}, function(err, res2, body) {
             res.send(JSON.parse(body));
         });
-	})
-    .post(function (req, res) {
-        var busboy = new Busboy({ headers: req.headers });
-        busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-            res.writeHead(200, {
-                "Content-Type": "video/mp4"
-            });
-            var saveTo = 'output.mov';
-            convertToMOV(file, res, function() {
-              res.end();
-            });
-        });
-        var finished = req.pipe(busboy);
-    });
+	});
 
 var username = 'human';
 var password = 'R3plicant';
@@ -59,4 +66,3 @@ function convertToMOV(file, output, callback) {
         })
         .writeToStream(output, {end: true});
 }
-

@@ -602,8 +602,12 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         return animation;
     };
 
+
+    /***************************
+    **Download And Convert    **
+    ***************************/
     $scope.downloadMov = function() {
-        uploader.uploadFileToUrl($scope.renderedVideo, '/api')
+        uploader.uploadFileToUrl($scope.renderedVideo, '/convert/2mov')
         .then(function(response) {
           downloadFile(response.data, 'sup.mov');
         });
@@ -614,9 +618,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     };
 
     $scope.downloadGIF = function() {
-        console.log('not implemented');
-        return;
-        uploader.uploadFileToUrl($scope.renderedVideo, '/api')
+        uploader.uploadFileToUrl($scope.renderedVideo, '/convert/2gif')
         .then(function(response) {
           downloadFile(response.data, 'sup.gif');
         });
