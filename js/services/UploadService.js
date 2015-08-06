@@ -3,12 +3,11 @@ angular.module('UploadService', []).factory('uploader', ['$http', function ($htt
         uploadFileToUrl : function(file, uploadUrl, success, error){
             var fd = new FormData();
             fd.append('file', file);
-            $http.post(uploadUrl, fd, {
+            return $http.post(uploadUrl, fd, {
                 transformRequest: angular.identity,
-                headers: {'Content-Type': undefined}
-            })
-            .success(success)
-            .error(error);
+                headers: {'Content-Type': undefined},
+                responseType: 'blob'
+            });
         }
     };
 }]);

@@ -31,13 +31,14 @@ router.route('/*')
     .post(function (req, res) {
         var busboy = new Busboy({ headers: req.headers });
         busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+            res.writeHead(200, {
+                "Content-Type": "video/mp4"
+            });
             var saveTo = 'output.mov';
-            convertToMOV(file, fs.createWriteStream(saveTo));
+            convertToMOV(file, res, function() {
+              res.end();
+            });
         });
-        // busboy.on('finish', function() {
-        //   res.writeHead(200, { 'Connection': 'close' });
-        //   res.end("File uploaded!");
-        // });
         var finished = req.pipe(busboy);
     });
 
@@ -56,7 +57,7 @@ function convertToMOV(file, output, callback) {
         .outputOptions('-movflags frag_keyframe+empty_moov')
         .on('end', callback)
         .on('error', function(err, stdout, stderr) {
-        console.log(err, stdout, stderr);
+            console.log(err, stdout, stderr);
         })
         .writeToStream(output, {end: true});
 }
