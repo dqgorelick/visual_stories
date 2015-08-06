@@ -8,7 +8,7 @@
     width: 100%;
     left: 0;
     bottom: 0;
-    z-index:1;
+    z-index:31;
     background: rgba(225,225,225,0.9);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(225,225,225,0.9)), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
     background: -webkit-linear-gradient(top, rgba(225,225,225,0.9) 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */

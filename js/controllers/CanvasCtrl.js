@@ -478,6 +478,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     };
 
     $scope.playSlides = function(recording) {
+        $scope.clearCanvas();
         $scope.continueRender = true;
         var currentSlide = -1;
         $scope.playing = true;
