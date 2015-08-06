@@ -606,11 +606,10 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     };
 
     $scope.convertToMov = function() {
-        uploader.uploadFileToUrl($scope.renderedVideo.src, '/api',
-            function(response) {
-            console.log('success', response);
-        }, function(response) {
-            console.log('errorr', response);
+        uploader.uploadFileToUrl($scope.renderedVideo.src, '/api')
+        .then(function(response) {
+          var url = (window.URL || window.webkitURL).createObjectURL(response.data);
+          window.open(url);
         });
     };
 });
