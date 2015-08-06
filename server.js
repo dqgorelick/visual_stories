@@ -1,4 +1,5 @@
 var fs 				= require('fs');
+var path            = require('path');
 var express 		= require('express');
 var app 			= express();
 var bodyParser 		= require('body-parser');
@@ -26,21 +27,19 @@ router.route('/*')
         }}, function(err, res2, body) {
             res.send(JSON.parse(body));
         });
-	});
+	})
     .post(function (req, res) {
         var busboy = new Busboy({ headers: req.headers });
         busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-          var saveTo = path.join('.', filename);
-          console.log('Uploading: ' + saveTo);
-          file.pipe(fs.createWriteStream(saveTo));
+            var saveTo = 'output.mov';
+            convertToMOV(file, fs.createWriteStream(saveTo));
         });
-        busboy.on('finish', function() {
-          console.log('Upload complete');
-          res.writeHead(200, { 'Connection': 'close' });
-          res.end("File uploaded!");
-          console.log();
-        });
+        // busboy.on('finish', function() {
+        //   res.writeHead(200, { 'Connection': 'close' });
+        //   res.end("File uploaded!");
+        // });
         var finished = req.pipe(busboy);
+    });
 
 
 
@@ -51,9 +50,16 @@ var papi = 'http://cms-publishapi.prd.nytimes.com/v1/publish/scoop/';
 app.listen(port);
 console.log('hosting on port ' + port);
 
-function convertToMOV(file) {
-    // ffmpeg(file)
-    //  .inputFormat('webm')
-
-    // ffmpeg -i pastversion.webm pastversion.mp4
+function convertToMOV(file, output) {
+  ffmpeg(file)
+      // .videoCodec('libx264')
+      .format('mp4')
+      .outputOptions('-movflags frag_keyframe+empty_moov')
+      .on('end', function() {
+        console.log('ffmpeg done');
+    })
+    .on('error', function(err, stdout, stderr) {
+        console.log(err, stdout, stderr);
+    })
+    .writeToStream(output, {end: true});
 }

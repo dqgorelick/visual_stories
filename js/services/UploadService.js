@@ -1,4 +1,4 @@
-angular.module('UploadService', []).factory('Upload', ['$http', function ($http) {
+angular.module('UploadService', []).factory('uploader', ['$http', function ($http) {
     return {
         uploadFileToUrl : function(file, uploadUrl, success, error){
             var fd = new FormData();
