@@ -618,10 +618,12 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     };
 
     $scope.downloadGIF = function() {
-        uploader.uploadFileToUrl($scope.renderedVideo, '/convert/2gif')
-        .then(function(response) {
-          downloadFile(response.data, 'sup.gif');
-        });
+        $scope.convertToGIF();
+
+        // uploader.uploadFileToUrl($scope.renderedVideo, '/convert/2gif')
+        // .then(function(response) {
+        //   downloadFile(response.data, 'sup.gif');
+        // });
     };
 
 });

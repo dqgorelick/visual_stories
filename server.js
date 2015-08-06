@@ -19,6 +19,16 @@ app.use('/', express.static(__dirname+'/'));
 app.use('/api', router);
 
 
+/* Gifify isn't working to begin with...
+
+var input = path.join(__dirname, 'sample.mp4');
+var output = path.join(__dirname, 'mov.gif');
+var gif = fs.createWriteStream(output);
+gifify(input, {}).pipe(gif);
+gif.on('close', function end() {
+    console.log('gifified ' + input + ' to ' + output);
+});*/
+
 app.post('/convert/2gif', function (req, res) {
     var busboy = new Busboy({ headers: req.headers });
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
