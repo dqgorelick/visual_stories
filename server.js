@@ -8,7 +8,6 @@ var router 			= express.Router();
 var ffmpeg 			= require('fluent-ffmpeg');
 var request         = require("request");
 var Busboy          = require('busboy');
-var gifify          = require('gifify');
 
 // //middleware
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
