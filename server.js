@@ -8,11 +8,13 @@ var router 			= express.Router();
 var ffmpeg 			= require('fluent-ffmpeg');
 var request         = require("request");
 var Busboy          = require('busboy');
+var spawn           = require('child_process').spawn;
 
 // //middleware
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(bodyParser.json());
 app.use('/', express.static(__dirname+'/'));
+// app.use('/trailers', express.static(__dirname+'/'));
 
 app.use('/api', router);
 
@@ -28,13 +30,16 @@ gif.on('close', function end() {
 });*/
 
 app.post('/convert/2gif', function (req, res) {
+    console.log('starting gif conversion');
     var busboy = new Busboy({ headers: req.headers });
+    var saveTo = 'tmp.webm';
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-        res.writeHead(200, {
-            "Content-Type": "image/gif"
-        });
-        convertToGIF(file, res, function() {
-          res.end();
+        file.pipe(fs.createWriteStream(saveTo));
+    });
+    busboy.on('finish', function() {
+        var output = __dirname + '/out.gif';
+        convertToGIF(saveTo, output, function() {
+            res.sendFile(output);
         });
     });
     var finished = req.pipe(busboy);
@@ -86,5 +91,19 @@ function convertToMOV(file, output, callback) {
 }
 
 function convertToGIF(file, output, callback) {
-    gifify(file, {}).pipe(output);
+    var gifify = spawn('./giffify.sh', [file, output]);
+    gifify.stdout.on('data', function (data) {    // register one or more handlers
+      console.log('stdout: ' + data);
+    });
+
+    gifify.stderr.on('data', function (data) {
+      console.log('stderr: ' + data);
+    });
+
+    gifify.on('exit', function (code) {
+      console.log('child process exited with code ' + code);
+      console.log('done with gif?');
+      callback();
+    });
 }
+
