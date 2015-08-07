@@ -32,7 +32,7 @@ var settings = {
 Other settings can be changed via the UI
 
 ## Contributors
-![](./assets/photos/team.JPG)
+
 Developers:
 - [Sam Kortchmar](https://github.com/skortchmark9)
 - [Dan Gorelick](https://github.com/dqgorelick)
@@ -44,4 +44,4 @@ Marketing Extraordinaires
 - Anisha Khanna
 - Ashley Leung
 
-
+![](./assets/photos/team.JPG)
