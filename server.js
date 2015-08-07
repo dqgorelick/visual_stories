@@ -7,7 +7,6 @@ var port 			= process.env.PORT || 8080;
 var router 			= express.Router();
 var ffmpeg 			= require('fluent-ffmpeg');
 var request         = require("request");
-var multer          = require('multer');
 var Busboy          = require('busboy');
 var gifify          = require('gifify');
 
@@ -43,6 +42,7 @@ app.post('/convert/2gif', function (req, res) {
 });
 
 app.post('/convert/2mov', function (req, res) {
+    console.log('starting file conversion');
     var busboy = new Busboy({ headers: req.headers });
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
         res.writeHead(200, {

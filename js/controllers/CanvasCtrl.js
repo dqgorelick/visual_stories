@@ -63,23 +63,25 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
 
     $scope.convertToGIF = function() {
         gifshot.createGIF({
-            gifWidth: 600,
-            gifHeight: 338,
+            gifWidth: $scope.canvas_width / 2,
+            gifHeight: $scope.canvas_height / 2,
             video: [
-                $scope.renderedVideo
+               (window.URL || window.webkitURL).createObjectURL($scope.renderedVideo)
             ],
-            interval: 20,
-            numFrames: 20,
+            numFrames: timeline.videoDuration() / 10,
             progressCallback: function(progress) {
                 $scope.writingGIF = progress * 100;
                 $scope.$apply();
             }
         }, function (obj) {
+            console.log(obj);
             if (!obj.error) {
                 $scope.writingGIF = 0;
-                var image = obj.image, animatedImage = document.createElement('img');
-                animatedImage.src = image;
-                $("#finished").append(animatedImage);
+                var animatedImage = document.createElement('img');
+                animatedImage.src = obj.image;
+                document.getElementById('finished').appendChild(animatedImage);
+                $scope.writingGIF = 0;
+                $scope.$apply();
             }
         });
     };
@@ -609,12 +611,12 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     $scope.downloadMov = function() {
         uploader.uploadFileToUrl($scope.renderedVideo, '/convert/2mov')
         .then(function(response) {
-          downloadFile(response.data, 'sup.mov');
+          downloadFile(response.data, 'Times Trailer.mov');
         });
     };
 
     $scope.downloadWebM = function() {
-        downloadFile($scope.renderedVideo, 'sup.webm');
+        downloadFile($scope.renderedVideo, 'Times Trailer.webm');
     };
 
     $scope.downloadGIF = function() {

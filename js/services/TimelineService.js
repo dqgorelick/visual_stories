@@ -8,6 +8,7 @@ angular.module('TimelineService', []).factory('timeline', [function() {
         slides.forEach(function(slide){
             time += slide.duration;
         })
+        console.log(time);
         return time;
     }
 

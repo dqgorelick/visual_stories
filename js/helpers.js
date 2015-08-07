@@ -4,8 +4,8 @@ function createThumbnail() {
     return thumb;
 }
 
-function downloadFile(file, name) {
-    var url = (window.URL || window.webkitURL).createObjectURL(file);
+function downloadFile(file, name, isObjectURL) {
+    var url = isObjectURL ? file : (window.URL || window.webkitURL).createObjectURL(file);
     var a = document.createElement('a');
     document.body.appendChild(a);
     a.download = name;
