@@ -4,6 +4,16 @@ function createThumbnail() {
     return thumb;
 }
 
+function downloadFile(file, name, isObjectURL) {
+    var url = isObjectURL ? file : (window.URL || window.webkitURL).createObjectURL(file);
+    var a = document.createElement('a');
+    document.body.appendChild(a);
+    a.download = name;
+    a.href = url;
+    a.click();
+    document.body.removeChild(a);
+}
+
 function wrapCanvasText(t, canvas, options) {
 
     if (typeof maxH === "undefined") {

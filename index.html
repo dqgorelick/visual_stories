@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="css/assets.css">
     <link rel="stylesheet" type="text/css" href="css/timeline.css">
     <link rel=”shortcut icon” href=”/favicon.ico”>
-    <script src="js/vendor/vhs-2.x.min.js"></script>
+    <script src="http://static01.nyt.com/video/vhs/vhs-2.x.min.js"></script>
     <script src="js/vendor/jquery-ui.min.js"></script>
     <script src="js/vendor/underscore-min.js"></script>
     <script src="js/vendor/angular.min.js"></script>
@@ -23,6 +23,7 @@
     <script src='js/vendor/gifshot.js'></script>
     <script src="js/controllers/ArticleCtrl.js"></script>
     <script src="js/controllers/CanvasCtrl.js"></script>
+    <script src="js/services/UploadService.js"></script>
     <script src="js/services/ConfigService.js"></script>
     <script src="js/services/TimelineService.js"></script>
     <script src='js/services/AssetService.js'></script>
@@ -87,7 +88,7 @@
                 <input class="btn btn btn-muted" ng-click="showCanvas = !showCanvas" id="toggle" value="{{showCanvas ? 'EDITOR' : 'PLAYER'}}" type="button">
             </div>
             <div id="mediaWrapper">
-                <canvas ng-show="showCanvas" id="canvas" class="media" width="600" height="337.5"></canvas>
+                <canvas ng-show="showCanvas" id="canvas" class="media" width="600" height="338"></canvas>
                 <div ng-show="!showCanvas">
                     <div id="video-container">
                         <div class="media" id="nyt-player">
@@ -97,15 +98,14 @@
             </div>
         </div>
             <div ng-show="!showCanvas" id="socialWrapper">
-                <a id="download-link" download="example.webm" href="">
-                    <input class="btn btn-sm btn-primary" value="Download" type="button" />
-                </a>
-                <input class="btn btn-sm btn-primary" value="Convert to .gif" type="button" ng-click="convertToGIF()" />
+                <input class="btn btn-sm btn-primary" value="Download" type="button" ng-click="downloadWebM()"/>
+                <input class="btn btn-sm btn-primary" value="Download As MOV" type="button" ng-click="downloadMov()">
+                <input class="btn btn-sm btn-primary" value="Convert to .gif" type="button" ng-click="downloadGIF()" />
                 <progressbar ng-show="writingGIF" class="progress-striped active" value="writingGIF" type="info"></progressbar>
                <div id="finished">
                </div>
             </div>
-            <input ng-show="showCanvas" class="btn btn-sm btn-primary addSlide" ng-click="$broadcast('addSlide'); " value="Add slide" type="button">
+            <input ng-show="showCanvas" class="btn btn-sm btn-primary addSlide" ng-click="$broadcast('addSlide'); " value="{{lastRestored == -1 ? 'Add slide' : 'Override'}}" type="button">
         <div ng-controller="TimelineCtrl as loki">
             <div id="timeline" class="sliding" ng-class="{expanded: expandTimeline}">
                 <button class="btn btn-sm btn-primary" ng-click="expandTimeline = !expandTimeline;" type="button">
@@ -126,7 +126,7 @@
                         <li class="slideView" ng-repeat="item in slides" data-drop="true" ng-model='slides' jqyoui-droppable="{index: {{$index}}, onDrop: 'loki.dropCallback(item.title, $index);'}" ng-init="addTime(item.duration)">
                             <div class="element" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" ng-model="slides" jqyoui-draggable="{index: {{$index}}}">
                                 <div class="element-cutoff">
-                                    <img class="ng-binding" src="{{item.thumb}}" ng-click="$parent.restoreSlide($index); setLastSlide($index);" ng-class="{selectedBorder: $index == lastSlide}">
+                                    <img class="ng-binding" ng-src="{{item.thumb}}" ng-click="$parent.restoreSlide($index); setLastSlide($index);" ng-class="{selectedBorder: $index == lastSlide}">
                                 </div>
                                 <button type="button" class="remove btn btn-muted btn-xs" ng-click="removeSlide($index);">X</button>
                                 <select ng-change="getTime()" class="form-control duration" ng-model="item.duration" ng-options="option.value as option.label for option in durations"></select>

@@ -31,7 +31,7 @@
 
     BUGS TO FIX:
         P1:
-        MAKE FONTS WORK for people testing app on the server
+        MAKE FONTS WORK for people testing app on the server - DONE
         Make fonts work for Firefox and Safi as well
         caption on two slides. - DONE
         panning bug - Dan - DONE
@@ -42,54 +42,60 @@
 
 
         P6:
-        fix removing.
-        timeline selection/override bugs
-        don't append video on second run through
+        fix removing. - DONE
+        timeline selection/override bugs - DONE
+        don't append video on second run through - DONE
 
 */
 
-angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'cfp.hotkeys']).controller('CanvasCtrl', function($scope, Config, assets, timeline, hotkeys) {
+angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'cfp.hotkeys', 'UploadService']).controller('CanvasCtrl', function($scope, Config, assets, timeline, hotkeys, uploader) {
 
     $scope.canvas = null;
     $scope.canvas_width = 600;
-    $scope.canvas_height = 337.5;
+    $scope.canvas_height = 338;
     $scope.video = null;
     $scope.showCanvas = true;
     $scope.defaultSlides = [];
     $scope.continueRender = true;
     $scope.writingGIF = 0;
     $scope.playing = false;
+    $scope.renderedVideo = null;
 
-
-    $scope.convertToGIF = function(){
+    $scope.convertToGIF = function() {
         gifshot.createGIF({
-            gifWidth: 600,
-            gifHeight: 338,
+            gifWidth: $scope.canvas_width / 2,
+            gifHeight: $scope.canvas_height / 2,
             video: [
-                $('#download-link').attr('href')
+               (window.URL || window.webkitURL).createObjectURL($scope.renderedVideo)
             ],
-            interval: 20,
-            numFrames: 20,
+            numFrames: timeline.videoDuration() / 10,
             progressCallback: function(progress) {
                 $scope.writingGIF = progress * 100;
                 $scope.$apply();
             }
         }, function (obj) {
+            console.log(obj);
             if (!obj.error) {
                 $scope.writingGIF = 0;
-                var image = obj.image, animatedImage = document.createElement('img');
-                animatedImage.src = image;
-                $("#finished").append(animatedImage);
+                var animatedImage = document.createElement('img');
+                animatedImage.src = obj.image;
+                document.getElementById('finished').appendChild(animatedImage);
+                $scope.writingGIF = 0;
+                $scope.$apply();
             }
         });
     };
+
+    $scope.resetVideo = function() {
+        $scope.video = new Whammy.Video(15);
+    }
 
     $scope.initialize = function() {
         $scope.canvas = new fabric.Canvas('canvas', {
             backgroundColor: '#000000'
         });
+        $scope.resetVideo();
         $scope.undo = [$scope.saveSlide()];
-        $scope.video = new Whammy.Video(15);
         $scope.$on('assets:ready', _.once($scope.createSlides));
     };
 
@@ -259,12 +265,12 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
 
     $scope.finalizeVideo = function() {
         var output = $scope.video.compile();
-        var link = webkitURL.createObjectURL(output);
+        $scope.renderedVideo = output;
+        var link = (window.URL || window.webkitURL).createObjectURL(output);
         if ($scope.player) {
             $scope.player.destroy();
             $('#video-container').append("<div id='nyt-player'></div>");
         }
-        $('#download-link').attr('href', link);
         $scope.player = VHS.player({
             container: 'nyt-player',
             analytics: false,
@@ -276,6 +282,8 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
             autoplay: true,
             mode: "html5"
         });
+
+        $scope.resetVideo();
         $scope.showCanvas = false;
         $scope.$apply();
     };
@@ -293,7 +301,6 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     $scope.lastRestored = -1;
 
     $scope.restoreSlide = function(index){
-        console.log("called!");
         $scope.canvas.clear();
         if ($scope.lastRestored != index){
             $scope.loadSlide(index, function() {
@@ -473,6 +480,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     };
 
     $scope.playSlides = function(recording) {
+        $scope.clearCanvas();
         $scope.continueRender = true;
         var currentSlide = -1;
         $scope.playing = true;
@@ -514,7 +522,6 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         var obj = $scope.canvas._objects[0];
         if (!obj) return;
         var trueDuration = slide.duration - slide.fadeOut
-        console.log(trueDuration);
         var animation = $scope.createAnimation(slide, obj, trueDuration);
 
         obj.animate(animation, {
@@ -596,4 +603,29 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
 
         return animation;
     };
+
+
+    /***************************
+    **Download And Convert    **
+    ***************************/
+    $scope.downloadMov = function() {
+        uploader.uploadFileToUrl($scope.renderedVideo, '/convert/2mov')
+        .then(function(response) {
+          downloadFile(response.data, 'Times Trailer.mov');
+        });
+    };
+
+    $scope.downloadWebM = function() {
+        downloadFile($scope.renderedVideo, 'Times Trailer.webm');
+    };
+
+    $scope.downloadGIF = function() {
+        $scope.convertToGIF();
+
+        // uploader.uploadFileToUrl($scope.renderedVideo, '/convert/2gif')
+        // .then(function(response) {
+        //   downloadFile(response.data, 'sup.gif');
+        // });
+    };
+
 });
