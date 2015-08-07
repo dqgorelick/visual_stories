@@ -9,7 +9,7 @@ A tool developed for NYT which allows users to create videos from NYTimes articl
 - navigate to main directory
 - run `npm install` to install dependencies
 - run `node server.js` to start up web server
-- navigate to localhost:8080 in the broswer
+- navigate to localhost:8080 in the browser
 
 ## Technologies
 
@@ -21,7 +21,6 @@ A tool developed for NYT which allows users to create videos from NYTimes articl
 ## Options
 
 Change default slide settings in `ConfigService.js`
-Other settings can be changed via the UI
 ```
 var settings = {
     duration: 2500, 	// slide duration
@@ -30,8 +29,9 @@ var settings = {
     kenBurns: 0,		// panning/Ken Burns effect
 };
 ```
+Other settings can be changed via the UI
 
-## Contributers
+## Contributors
 ![](./assets/photos/team.JPG)
 Developers:
 - [Sam Kortchmar](https://github.com/skortchmark9)
@@ -39,7 +39,9 @@ Developers:
 - [Jordan Falcon](https://github.com/j-falcon122)
 - [Sudhanshu Nath Mishra](https://github.com/sudhanshunathmishra)
 
-Marketing Extrordinairs
+Marketing Extraordinaires
 - Alex Sternlicht
 - Anisha Khanna
 - Ashley Leung
+
+
