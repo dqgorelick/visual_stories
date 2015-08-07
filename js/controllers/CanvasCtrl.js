@@ -609,7 +609,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     **Download And Convert    **
     ***************************/
     $scope.downloadMov = function() {
-        uploader.uploadFileToUrl($scope.renderedVideo, '/convert/2mov')
+        uploader.uploadFileToUrl($scope.renderedVideo, '/api/convert/2mov')
         .then(function(response) {
           downloadFile(response.data, 'Times Trailer.mov');
         });
@@ -620,11 +620,9 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     };
 
     $scope.downloadGIF = function() {
-        // $scope.convertToGIF();
-
-        uploader.uploadFileToUrl($scope.renderedVideo, '/convert/2gif')
+        uploader.uploadFileToUrl($scope.renderedVideo, '/api/convert/2gif')
         .then(function(response) {
-          // downloadFile(response.data, 'sup.gif');
+            downloadFile(response.data, 'Times Trailer.gif');
         });
     };
 
