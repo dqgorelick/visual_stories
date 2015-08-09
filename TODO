@@ -1,6 +1,7 @@
 Angular Code Review:
     Angular-ize: we need to thin our controllers big time,
     Only declare $scope variables if they really need to be there.
+    move all localstorage stuff to its own file
 
 
 
@@ -19,6 +20,7 @@ THINGS TO ADD
     Make it easier to create rectangles
 
     P3:
+    Change multiple slides?
     download w/article name as filename.
     quotes with overlays by default
     quotes itext

@@ -1,40 +1,13 @@
-angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'cfp.hotkeys', 'UploadService']).controller('CanvasCtrl', function($scope, Config, assets, timeline, hotkeys, uploader) {
+angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp.hotkeys', 'UploadService']).controller('CanvasCtrl', function($scope, Config, assets, slides, hotkeys, uploader) {
 
     $scope.canvas = null;
     $scope.canvas_width = 600;
     $scope.canvas_height = 338;
     $scope.video = null;
     $scope.showCanvas = true;
-    $scope.defaultSlides = [];
     $scope.continueRender = true;
-    $scope.writingGIF = 0;
     $scope.playing = false;
     $scope.renderedVideo = null;
-
-    $scope.convertToGIF = function() {
-        gifshot.createGIF({
-            gifWidth: $scope.canvas_width / 2,
-            gifHeight: $scope.canvas_height / 2,
-            video: [
-               (window.URL || window.webkitURL).createObjectURL($scope.renderedVideo)
-            ],
-            numFrames: timeline.videoDuration() / 10,
-            progressCallback: function(progress) {
-                $scope.writingGIF = progress * 100;
-                $scope.$apply();
-            }
-        }, function (obj) {
-            console.log(obj);
-            if (!obj.error) {
-                $scope.writingGIF = 0;
-                var animatedImage = document.createElement('img');
-                animatedImage.src = obj.image;
-                document.getElementById('finished').appendChild(animatedImage);
-                $scope.writingGIF = 0;
-                $scope.$apply();
-            }
-        });
-    };
 
     $scope.resetVideo = function() {
         $scope.video = new Whammy.Video(15);
@@ -267,7 +240,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
 
     $scope.loadSlide = function(slide, callback) {
         if (_.isNumber(slide)) {
-            slide = timeline.slides[slide];
+            slide = slides.slides[slide];
         }
         $scope.canvas.loadFromJSONWithoutClearing(slide.json, function() {
             callback ? callback() : $scope.canvas.renderAll();
@@ -299,11 +272,6 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         starter.kenBurns = 0;
         $scope.canvas.clear();
         return starter;
-
-        // $scope.defaultSlides.push({
-        //     name: "starter",
-        //     url: $("#starter").attr("src"),
-        // });
     }
 
     $scope.createHeadlineSlide = function(headline, byline) {
@@ -328,11 +296,6 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         headliner.kenBurns = 0;
         $scope.clearCanvas();
         return headliner;
-
-        // $scope.defaultSlides.push({
-        //     name: "headliner",
-        //     url: document.getElementById("canvas").toDataURL("image/png"),
-        // });
     }
 
     $scope.generateImageSlide = function(image, caption, effects) {
@@ -378,20 +341,15 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
         ender.duration = 1500;
         $scope.clearCanvas();
         return ender;
-
-        // $scope.defaultSlides.push({
-        //     name: "ender",
-        //     url: $("#ender").attr("src"),
-        // });
     }
 
     $scope.createSlides = function() {
         assets.getData().then(function(loaded) {
 
-            timeline.slides.push($scope.createStarterSlide());
+            slides.slides.push($scope.createStarterSlide());
             var headline = _.findWhere(loaded.metadata, {name: 'Headline'}).text;
             var byline = _.findWhere(loaded.metadata, {name: 'Byline'}).text;
-            timeline.slides.push($scope.createHeadlineSlide(headline, byline));
+            slides.slides.push($scope.createHeadlineSlide(headline, byline));
 
 
             var summary = _.findWhere(loaded.metadata, {name: 'Summary'}).text;
@@ -403,10 +361,10 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
                 var effects = {kenBurns: it%6+1}
                 var caption = (it == 0) ? summary : null;
                 var slide = $scope.generateImageSlide('image' + it, caption, effects);
-                timeline.slides.push(slide);
+                slides.slides.push(slide);
             }
 
-            timeline.slides.push($scope.generateEndingSlide());
+            slides.slides.push($scope.generateEndingSlide());
             $scope.$broadcast('addSlide');
         });
     };
@@ -421,7 +379,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
     };
 
     $scope.playSlide = function(index, nextSlide) {
-        var currentSlide = timeline.slides[index];
+        var currentSlide = slides.slides[index];
         var nop = function(x, y, cb) {cb()};
 
         $scope.loadSlide(currentSlide,
@@ -437,7 +395,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'TimelineService', 'c
 
         var changeSlide = function() {
             currentSlide++;
-            if ($scope.playing && currentSlide < timeline.slides.length) {
+            if ($scope.playing && currentSlide < slides.slides.length) {
                 $scope.playSlide(currentSlide, changeSlide);
             } else {
                 $scope.continueRender = false;

@@ -1,63 +1,21 @@
-angular.module('Timeline', ['TimelineService', 'ConfigService', 'cfp.hotkeys']).controller('TimelineCtrl', function($scope, timeline, hotkeys, Config) {
-    var count = localStorage.length;
-    $scope.slides = [];
+angular.module('Timeline', ['SlidesService', 'ConfigService', 'cfp.hotkeys']).controller('TimelineCtrl', function($scope, slides, hotkeys, Config) {
+
+    $scope.slides = slides;
     $scope.expandTimeline = false;
     $scope.time = '0 seconds';
     $scope.initialLoad = false;
-    $scope.lastSlide = -1;
-    $scope.lastTimeline = [];
-
-    $scope.setLastSlide = function(index){
-    	if(index == $scope.lastSlide){
-    	    $scope.lastSlide = -1;
-    	} else {
-    	    $scope.lastSlide = index;
-    	}
-    };
-
-    $scope.setLastTimeline = function(){
-    	$scope.lastTimeline = [];
-    	timeline.slides.forEach(function(data, it){
-    		$scope.lastTimeline[it] = data;
-    	});
-    };
-
-    $scope.$on("addSlide", function() {
-        $scope.fillSlides();
-        var data = Config.defaultSlide($scope.saveSlide());
-        if($scope.lastSlide >= 0) {
-            timeline.slides[$scope.lastSlide] = data;
-        } else {
-        	// doesn't add slide first time page loads
-        	if(!$scope.initialLoad) {
-        		$scope.initialLoad = true;
-        	} else {
-        		timeline.slides.push(data);
-        	}
-        }
-        $scope.setLastTimeline();
-    });
+    $scope.effectIndex = -1;
+    $scope.draggedSlide = -1;
 
 
-    this.dropCallback = function(event, ui, title, $index) {
-    	$scope.lastSlide = $index;
-    	var movedSlide = timeline.slides[$index];
-    	$scope.lastTimeline.forEach(function(data, it){
-    		if(data === movedSlide){
-    			$scope.lastTimeline.splice(it,1);
-    			$scope.lastTimeline.splice($index,0,movedSlide);
-    		}
-    	});
-    	timeline.slides = $scope.lastTimeline;
-    	$scope.slides = $scope.lastTimeline;
-    	$scope.setLastTimeline();
-    };
+    $scope.dragStart = function(event, ui, index) {
+        console.log('drag start', index);
+        $scope.draggedSlide = index;
+    }
 
-    $scope.getTime = function() {
-        var time = _.reduce($scope.slides, function(memo, slide) {
-            return memo + slide.duration;
-        }, 0);
-        $scope.time = time / 1000 + ' seconds';
+    $scope.dropped = function(event, ui, slide, index) {
+        $scope.slides.swap($scope.draggedSlide, index);
+        $scope.draggedSlide = -1;
     };
 
     hotkeys.add({
@@ -67,19 +25,6 @@ angular.module('Timeline', ['TimelineService', 'ConfigService', 'cfp.hotkeys']).
             $scope.expandTimeline = !$scope.expandTimeline;
         }
     });
-
-    $scope.save = function() {
-        localStorage.setItem(count, count);
-        count++;
-    };
-    $scope.load = function() {
-        localStorage.getItem("example");
-        count++;
-    };
-    $scope.clear = function() {
-        localStorage.clear();
-    };
-
 
     $scope.durations = [
         {value: 500, label: '0.5 secs'},
@@ -99,36 +44,11 @@ angular.module('Timeline', ['TimelineService', 'ConfigService', 'cfp.hotkeys']).
         {value:  5, label: 'PANNING LEFT'}
     ];
 
-    $scope.fillSlides = function() {
-        $scope.slides = timeline.slides;
-        if ($scope.slides.length) {
-            $scope.expandTimeline = true;
-        }
-        $scope.getTime();
-    };
+    $scope.toggleSelected = function(slide) {
+        $scope.slides.selected = ($scope.slides.selected == slide) ? null : slide;
+    }
 
-    $scope.randomKen = function (slide) {
-        slide.kenBurns = Math.ceil(Math.random() * 5);
-    };
-
-    $scope.removeSlide = function(index){
-    	timeline.slides.splice(index, 1);
-        $scope.getTime();
-        $scope.setLastTimeline();
-    };
-
-    $scope.effectIndex = -1;
     $scope.effectShow = function(index){
-    	if(index == $scope.effectIndex){
-    		$scope.effectIndex = -1
-    	} else {
-    		$scope.effectIndex = index;
-    	}
+        $scope.effectIndex = (index == $scope.effectIndex) ? -1 : index;
     };
-
-    //  change all feature to be added later?
-    $scope.changeAll = function() {
-        $scope.changeAllExpanded = !$scope.changeAllExpanded;
-    };
-    $scope.changeAllExpanded = false;
 });
