@@ -2,31 +2,23 @@
 
     THINGS TO ADD
 
-        P2:
-        ken burns selection - Dan - DONE
-        show the length of the video - Jordan DONE
-        show the length of the video - Sam DONE
-        populate text from metadata Sam DONE
-        preview doesn't work and breaks custom rects for text - Sam DONE
-
-        P3:
-        Put it on a server
+        P1:
+        Multiple animation - SAM
+        Templates
         Error message if article chosen is interactive or other
-        Share buttons
 
-        P4:
+        P2:
+        Fix itext
         Smarter generation? Algorithm - definitely less images
-        push things out of the way
-        gif export is slow
+        Share buttons
         Make it easier to create rectangles
 
-        P5:
+        P3:
         download w/article name as filename.
-        add slide change to be save slide.
         quotes with overlays by default
         quotes itext
         automatic align
-
+        push things out of the way in timeline
 
 
     BUGS TO FIX:
@@ -39,9 +31,14 @@
         when you drag, selected shouldn't change - Dan - DONE
         Center text appropriately- DONE
         stop? - DONE?
-
-
-        P6:
+        ken burns selection - Dan - DONE
+        show the length of the video - Jordan DONE
+        show the length of the video - Sam DONE
+        populate text from metadata Sam DONE
+        preview doesn't work and breaks custom rects for text - Sam DONE
+        Put it on a server - DONE
+        gif export is slow - DONE
+        add slide change to be save slide - DONE
         fix removing. - DONE
         timeline selection/override bugs - DONE
         don't append video on second run through - DONE
