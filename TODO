@@ -1,5 +1,5 @@
 Angular Code Review:
-    Angular-ize: we need to thin our controllers big time,
+    Angular-ize: we need to thin our controllers big time, esp. CanvasCtrl.
     Only declare $scope variables if they really need to be there.
     move all localstorage stuff to its own file
 

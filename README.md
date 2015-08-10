@@ -15,8 +15,7 @@ A tool developed for NYT which allows users to create videos from NYTimes articl
 
 - HTML5 `canvas` for video creation using the [fabric.js](https://github.com/kangax/fabric.js/) library
 - [whammy.js](https://github.com/antimatter15/whammy) for rendering video into `.webm` on the front-end
-- [ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg) for converting `.webm` into `.mov` using data streams
-- [gifshot](https://github.com/yahoo/gifshot) for converting `.webm` to `.gif` on the front end
+- [ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg) for converting `.webm` into `.mov` & `.gif` using data streams
 
 ## Options
 
