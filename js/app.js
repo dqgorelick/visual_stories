@@ -9,7 +9,8 @@ var app = angular.module ('timesTrailer',
      'AssetService',
      'ngDragDrop',
      'cfp.hotkeys',
-     'UploadService']);
+     'UploadService',
+     'ui.sortable']);
 
 app.directive("scroll", function ($window) {
     return function($scope, element, attrs) {

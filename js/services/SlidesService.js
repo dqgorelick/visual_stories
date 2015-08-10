@@ -18,8 +18,11 @@ angular.module('SlidesService', []).factory('slides', [function() {
 
     var swap = function(first, next) {
         var tmp = slides[first];
+        delete slides[first];
+        slides[first] = slides[next];
         slides[next] = tmp;
-        slides[first] = tmp;
+
+
     };
 
     return {

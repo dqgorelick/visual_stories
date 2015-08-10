@@ -1,22 +1,9 @@
 angular.module('Timeline', ['SlidesService', 'ConfigService', 'cfp.hotkeys']).controller('TimelineCtrl', function($scope, slides, hotkeys, Config) {
 
-    $scope.slides = slides;
+    $scope.SlidesService = slides;
     $scope.expandTimeline = false;
     $scope.time = '0 seconds';
-    $scope.initialLoad = false;
     $scope.effectIndex = -1;
-    $scope.draggedSlide = -1;
-
-
-    $scope.dragStart = function(event, ui, index) {
-        console.log('drag start', index);
-        $scope.draggedSlide = index;
-    }
-
-    $scope.dropped = function(event, ui, slide, index) {
-        $scope.slides.swap($scope.draggedSlide, index);
-        $scope.draggedSlide = -1;
-    };
 
     hotkeys.add({
         combo: 't',
@@ -44,8 +31,12 @@ angular.module('Timeline', ['SlidesService', 'ConfigService', 'cfp.hotkeys']).co
         {value:  5, label: 'PANNING LEFT'}
     ];
 
+    $scope.sortableOptions = {
+        axis: 'x',
+    };
+
     $scope.toggleSelected = function(slide) {
-        $scope.slides.selected = ($scope.slides.selected == slide) ? null : slide;
+        $scope.SlidesService.selected = ($scope.SlidesService.selected == slide) ? null : slide;
     }
 
     $scope.effectShow = function(index){

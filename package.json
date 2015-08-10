@@ -18,6 +18,7 @@
   "homepage": "https://github.com/nytm/interns-2015-visual-stories#readme",
   "dependencies": {
     "angular-hotkeys": "^1.4.5",
+    "angular-ui-sortable": "^0.13.4",
     "body-parser": "^1.13.1",
     "busboy": "^0.2.9",
     "express": "^4.13.0",

@@ -29,6 +29,7 @@
     <script src="js/controllers/EditorCtrl.js"></script>
     <script src="js/controllers/AssetCtrl.js"></script>
     <script src="js/controllers/TimelineCtrl.js"></script>
+    <script type="text/javascript" src="node_modules/angular-ui-sortable/src/sortable.js"></script>
     <script type="text/ng-template" id="modal.html">
         <div id="modalPage">
             <div id="modalWrapper">
@@ -121,15 +122,12 @@
                     <img id="ender" src="assets/slides/ender.jpg">
                 </div="templates">
                 <div class="slideWrapper">
-                    <ul class="row-fluid no-overflow" ng-init="slides.getDisplayTime()">
-                        <li class="slideView" ng-repeat="slide in slides.slides" data-drop="true" jqyoui-droppable="{onDrop: 'loki.dropped(slide, $index)'}">
-                            <div class="element" data-drag="true" data-jqyoui-options="{revert: 'invalid', axis: 'x'}" jqyoui-draggable="{index: $index, animate: true, onStart: 'loki.dragStart($index)'}">
-                                <div class="element-cutoff">
-                                    <img class="ng-binding" ng-src="{{slide.thumb}}" ng-click="$parent.restoreSlide($index); toggleSelected(slide)" ng-class="{selectedBorder: slides.selected == slide}">
-                                </div>
+                    <ul class="row-fluid no-overflow" ui-sortable="sortableOptions" ng-model="slides.slides" ng-init="slides.getDisplayTime()">
+                        <li class="slideView" ng-repeat="slide in slides.slides track by $index">
+                            <div class="slideControls">
                                 <button type="button" class="remove btn btn-muted btn-xs" ng-click="slides.removeSlide($index);">X</button>
-                                <select ng-change="slides.getDisplayTime()" class="form-control duration" ng-model="slide.duration" ng-options="option.value as option.label for option in durations"></select>
-                                <button type="button" class="effects btn btn-success btn-xs" ng-click="effectShow($index);">fx</button>
+                                <button type="button" class="effects btn btn-success btn-xs" ng-click="effectShow($index);">fx
+                                </button>
                                 <div class="effect-controller" ng-class="{active: $index == effectIndex}">
                                     <input class="effect-checkbox" type="checkbox" ng-model="slide.fadeIn" ng-true-value="1000" ng-false-value="0">
                                     <p class="effect-label">FADE OUT</p>
@@ -137,6 +135,10 @@
                                      <select class="form-control kenBurns" ng-model="slide.kenBurns" ng-options="option.value as option.label for option in effects"></select>
                                     <p class="effect-label">FADE IN</p>
                                 </div>
+                            </div>
+                            <div class="element" >
+                                <img class="ng-binding" ng-src="{{slide.thumb}}" ng-click="$parent.restoreSlide($index); toggleSelected(slide)" ng-class="{selectedBorder: slides.selected == slide}">
+                                <select ng-change="slides.getDisplayTime()" class="form-control duration" ng-model="slide.duration" ng-options="option.value as option.label for option in durations"></select>
                             </div>
                         </li>
                     </ul>

@@ -31,6 +31,12 @@
     text-align: center;
     padding-top: 0px;
     cursor: pointer;
+    clear: both;
+}
+
+.slideControls {
+    position: relative;
+    top: 20px;
 }
 
 .element img{
@@ -40,30 +46,24 @@
     border-top-right-radius: 4px;
 }
 
-.element-cutoff{
-    max-height:80px;
-    overflow-y:hidden;
-}
-
 
 .remove, .effects {
-    position:absolute;
-    top: 0;
+    position:relative;
     width: 24px;
     z-index: 1;
 }
 .remove {
-    left: 0;
+    float: left;
 }
 
 .effects{
-    right: 0;
+    float: right;
 }
 
 .effect-controller{
     position:absolute;
     top:0;
-    right:0;
+    right: -15px;
     width:0px;
     border-radius: 4px;
     color:#ffffff;
@@ -73,9 +73,9 @@
 }
 
 .effect-controller.active{
+    right: 0px;
     width: 100%;
     height: 93px;
-    background-color: black;
 }
 
 .effect-label, .effect-checkbox, .kenBurns{
@@ -90,13 +90,13 @@
     font-size:0px;
     text-align:right;
 }
+
 .effect-controller.active > .effect-label{
     font-size:16px;
     font-weight: bold;
     right:29px;
     top:24px;.
 }
-
 
 .effect-controller.active > .effect-checkbox{
     right:8px;
@@ -131,25 +131,11 @@
     display: inline-block;
     height: 120px;
     width: 120px;
-    margin: 10px 12px 10px 12px;
+    margin: -5px 12px 10px 12px;
     line-height: 20px;
+    overflow: hidden;
 }
 
-.slideView:before{
-    display:none;
-    content: "";
-    width: 0;
-    height: 0;
-    position: absolute;
-    border-top: 18px solid transparent;
-    border-bottom: 18px solid transparent;
-    border-left: 14px solid #1D1F21;
-    margin-left: -20px;
-    margin-top: 19px;
-}
-.slideView:nth-child(1):before{
-    display:none;
-}
 .slideWrapper{
     position:absolute;
     width: 100%;
