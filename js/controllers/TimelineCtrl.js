@@ -1,8 +1,7 @@
-angular.module('Timeline', ['SlidesService', 'ConfigService', 'cfp.hotkeys']).controller('TimelineCtrl', function($scope, slides, hotkeys, Config) {
+angular.module('Timeline', ['SlidesService', 'ConfigService', 'cfp.hotkeys']).controller('TimelineCtrl', function($scope, SlidesService, hotkeys, Config) {
 
-    $scope.SlidesService = slides;
+    $scope.SlidesService = SlidesService;
     $scope.expandTimeline = false;
-    $scope.time = '0 seconds';
     $scope.effectIndex = -1;
 
     hotkeys.add({
@@ -34,10 +33,6 @@ angular.module('Timeline', ['SlidesService', 'ConfigService', 'cfp.hotkeys']).co
     $scope.sortableOptions = {
         axis: 'x',
     };
-
-    $scope.toggleSelected = function(slide) {
-        $scope.SlidesService.selected = ($scope.SlidesService.selected == slide) ? null : slide;
-    }
 
     $scope.effectShow = function(index){
         $scope.effectIndex = (index == $scope.effectIndex) ? -1 : index;

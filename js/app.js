@@ -7,7 +7,6 @@ var app = angular.module ('timesTrailer',
      'ConfigService',
      'SlidesService',
      'AssetService',
-     'ngDragDrop',
      'cfp.hotkeys',
      'UploadService',
      'ui.sortable']);
@@ -24,6 +23,7 @@ app.directive("scroll", function ($window) {
         });
     };
 });
+
 app.directive('imageonload', function() {
         return {
             restrict: 'A',

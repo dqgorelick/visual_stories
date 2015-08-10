@@ -1,37 +1,53 @@
-angular.module('SlidesService', []).factory('slides', [function() {
+angular.module('SlidesService', []).factory('SlidesService', [function() {
 
     var slides = [];
-
-    var getDisplayTime = function() {
-        return getTime() / 1000 + ' seconds';
-    };
+    var time = {millis: 0, display: '0 seconds'};
+    var selected = {slide: null};
 
     var getTime = function() {
-        return time = _.reduce(slides, function(memo, slide) {
+        var millis = _.reduce(slides, function(memo, slide) {
             return memo + slide.duration;
         }, 0);
+
+        var display = millis / 1000 + ' seconds';
+        time.millis = millis;
+        time.display = display;
+        return time;
     };
 
     var removeSlide = function(index) {
+        if (slides[index] == selected.slide) {
+            selected.slide = null;
+        }
+
         slides.splice(index, 1);
+        getTime();
     };
 
-    var swap = function(first, next) {
-        var tmp = slides[first];
-        delete slides[first];
-        slides[first] = slides[next];
-        slides[next] = tmp;
+    var addSlide = function(slide) {
+        slides.push(slide);
+        getTime();
+    }
 
+    var overwriteSelected = function(slide) {
+        selected.slide.thumb = slide.thumb;
+        selected.slide.json = slide.json;
+    };
 
+    var toggleSelected = function(slide) {
+        selected.slide = (selected.slide == slide) ? null : slide;
     };
 
     return {
         slides: slides,
         removeSlide: removeSlide,
+        addSlide : addSlide,
         getTime: getTime,
-        getDisplayTime: getDisplayTime,
-        swap: swap,
-        selected: null,
+        time: time,
+        addSlide: addSlide,
+        overwriteSelected: overwriteSelected,
+        selected: selected,
+        toggleSelected: toggleSelected,
     };
 
 }]);

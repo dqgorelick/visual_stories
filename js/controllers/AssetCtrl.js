@@ -1,4 +1,4 @@
-angular.module('Assets', ['AssetService', 'ConfigService', 'SlidesService', 'ui.bootstrap']).controller("AssetCtrl", function ($scope, $sce, assets, Config, slides) {
+angular.module('Assets', ['AssetService', 'ConfigService', 'ui.bootstrap']).controller("AssetCtrl", function ($scope, $sce, assets, Config) {
 
 	$scope.showPhoto = false;
 	$scope.showText = false;

@@ -19,7 +19,6 @@
     <script src="js/vendor/fabric.js"></script>
     <script src="js/vendor/ui-bootstrap-tpls-0.13.0.min.js"></script>
     <script src="node_modules/angular-hotkeys/build/hotkeys.min.js"></script>
-    <script src="js/vendor/angular-dragdrop.min.js"></script>
     <script src="js/controllers/ArticleCtrl.js"></script>
     <script src="js/controllers/CanvasCtrl.js"></script>
     <script src="js/services/UploadService.js"></script>
@@ -105,7 +104,7 @@
                <div id="finished">
                </div>
             </div>
-            <input ng-show="showCanvas" class="btn btn-sm btn-primary addSlide" ng-click="$broadcast('addSlide'); " value="{{lastRestored == -1 ? 'Add slide' : 'Override'}}" type="button">
+            <input ng-show="showCanvas" class="btn btn-sm btn-primary addSlide" ng-click="addToTimeline()" value="{{selected.slide ? 'Override' : 'Add slide'}}" type="button">
         <div ng-controller="TimelineCtrl as loki">
             <div id="timeline" class="sliding" ng-class="{expanded: expandTimeline}">
                 <button class="btn btn-sm btn-primary" ng-click="expandTimeline = !expandTimeline;" type="button">
@@ -114,18 +113,18 @@
                 </button>
                 <div class="videoTime">
                     <span class="glyphicon glyphicon-time"></span>
-                    <label>{{time}}</label>
+                    <label>{{SlidesService.time.display}}</label>
                 </div>
 
-                <div="templates" style="display:none">
+                <div id="templates" style="display:none">
                     <img id="starter" src="assets/slides/starter.jpg">
                     <img id="ender" src="assets/slides/ender.jpg">
-                </div="templates">
+                </div>
                 <div class="slideWrapper">
-                    <ul class="row-fluid no-overflow" ui-sortable="sortableOptions" ng-model="slides.slides" ng-init="slides.getDisplayTime()">
-                        <li class="slideView" ng-repeat="slide in slides.slides track by $index">
+                    <ul class="row-fluid no-overflow" ui-sortable="sortableOptions" ng-model="SlidesService.slides">
+                        <li class="slideView" ng-repeat="slide in SlidesService.slides track by $index">
                             <div class="slideControls">
-                                <button type="button" class="remove btn btn-muted btn-xs" ng-click="slides.removeSlide($index);">X</button>
+                                <button type="button" class="remove btn btn-muted btn-xs" ng-click="SlidesService.removeSlide($index);">X</button>
                                 <button type="button" class="effects btn btn-success btn-xs" ng-click="effectShow($index);">fx
                                 </button>
                                 <div class="effect-controller" ng-class="{active: $index == effectIndex}">
@@ -137,8 +136,8 @@
                                 </div>
                             </div>
                             <div class="element" >
-                                <img class="ng-binding" ng-src="{{slide.thumb}}" ng-click="$parent.restoreSlide($index); toggleSelected(slide)" ng-class="{selectedBorder: slides.selected == slide}">
-                                <select ng-change="slides.getDisplayTime()" class="form-control duration" ng-model="slide.duration" ng-options="option.value as option.label for option in durations"></select>
+                                <img class="ng-binding" ng-src="{{slide.thumb}}" ng-click="SlidesService.toggleSelected(slide); $parent.restoreSlide();" ng-class="{selectedBorder: SlidesService.selected.slide == slide}">
+                                <select class="form-control duration" ng-model="slide.duration" ng-options="option.value as option.label for option in durations" ng-change="SlidesService.getTime()"></select>
                             </div>
                         </li>
                     </ul>

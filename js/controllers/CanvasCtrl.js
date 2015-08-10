@@ -1,4 +1,4 @@
-angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp.hotkeys', 'UploadService']).controller('CanvasCtrl', function($scope, Config, assets, slides, hotkeys, uploader) {
+angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp.hotkeys', 'UploadService']).controller('CanvasCtrl', function($scope, Config, assets, SlidesService, hotkeys, uploader) {
 
     $scope.canvas = null;
     $scope.canvas_width = 600;
@@ -8,6 +8,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
     $scope.continueRender = true;
     $scope.playing = false;
     $scope.renderedVideo = null;
+    $scope.selected = SlidesService.selected;
 
     $scope.resetVideo = function() {
         $scope.video = new Whammy.Video(15);
@@ -18,12 +19,12 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
             backgroundColor: '#000000'
         });
         $scope.resetVideo();
-        $scope.undo = [$scope.saveSlide()];
+        $scope.undo = [$scope.getJSON()];
         $scope.$on('assets:ready', _.once($scope.createSlides));
     };
 
     $scope.qUndo = function(){
-        var saved = $scope.saveSlide();
+        var saved = $scope.getJSON();
         if (saved !== $scope.undo[$scope.undo.length - 1]) {
             $scope.undo.push(saved);
         }
@@ -215,32 +216,32 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
     **   Loading Slides       **
     ***************************/
 
-    $scope.saveSlide = function(){
+    $scope.getJSON = function(){
         var saved = $scope.canvas.toJSON();
         saved = JSON.stringify(saved);
         return saved;
     };
 
-    $scope.lastRestored = -1;
-
-    $scope.restoreSlide = function(index){
+    $scope.restoreSlide = function(){
         $scope.canvas.clear();
-        if ($scope.lastRestored != index){
-            $scope.loadSlide(index, function() {
+        if ($scope.selected.slide) {
+            $scope.addButton = "Override";
+            $scope.loadSlide($scope.selected.slide, function() {
                 $scope.canvas.renderAll();
                 $scope.qUndo();
-            })
-            $scope.lastRestored = index;
+            });
         } else {
-            $scope.lastRestored = -1;
+            $scope.addButton = "Add Slide";
         }
-
     };
 
-
     $scope.loadSlide = function(slide, callback) {
+        if (!slide) {
+            return;
+        }
+
         if (_.isNumber(slide)) {
-            slide = slides.slides[slide];
+            slide = SlidesService.slides[slide];
         }
         $scope.canvas.loadFromJSONWithoutClearing(slide.json, function() {
             callback ? callback() : $scope.canvas.renderAll();
@@ -265,7 +266,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
 
     $scope.createStarterSlide = function() {
         $scope.chooseImage("starter", true);
-        var starter = Config.defaultSlide($scope.saveSlide());
+        var starter = Config.defaultSlide($scope.getJSON());
         starter.duration = 1500;
         starter.fadeIn = 1000;
         starter.fadeOut = 0;
@@ -291,7 +292,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
 
         $scope.chooseText(headline, headlineStyle, headlinePosition, true);
         $scope.chooseText(byline, bylineStyle, bylinePosition, true);
-        var headliner = Config.defaultSlide($scope.saveSlide());
+        var headliner = Config.defaultSlide($scope.getJSON());
         headliner.fadeIn = 1000;
         headliner.kenBurns = 0;
         $scope.clearCanvas();
@@ -321,7 +322,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
             $scope.moveToBottom(text);
         }
 
-        var imageSlide = Config.defaultSlide($scope.saveSlide());
+        var imageSlide = Config.defaultSlide($scope.getJSON());
         imageSlide.kenBurns = effects.kenBurns;
         $scope.clearCanvas();
         return imageSlide;
@@ -336,7 +337,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
 
     $scope.generateEndingSlide = function() {
         $scope.chooseImage("ender", true);
-        var ender = Config.defaultSlide($scope.saveSlide());
+        var ender = Config.defaultSlide($scope.getJSON());
         ender.kenBurns = 0;
         ender.duration = 1500;
         $scope.clearCanvas();
@@ -346,10 +347,10 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
     $scope.createSlides = function() {
         assets.getData().then(function(loaded) {
 
-            slides.slides.push($scope.createStarterSlide());
+            SlidesService.addSlide($scope.createStarterSlide());
             var headline = _.findWhere(loaded.metadata, {name: 'Headline'}).text;
             var byline = _.findWhere(loaded.metadata, {name: 'Byline'}).text;
-            slides.slides.push($scope.createHeadlineSlide(headline, byline));
+            SlidesService.addSlide($scope.createHeadlineSlide(headline, byline));
 
 
             var summary = _.findWhere(loaded.metadata, {name: 'Summary'}).text;
@@ -361,12 +362,20 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
                 var effects = {kenBurns: it%6+1}
                 var caption = (it == 0) ? summary : null;
                 var slide = $scope.generateImageSlide('image' + it, caption, effects);
-                slides.slides.push(slide);
+                SlidesService.addSlide(slide);
             }
 
-            slides.slides.push($scope.generateEndingSlide());
-            $scope.$broadcast('addSlide');
+            SlidesService.addSlide($scope.generateEndingSlide());
         });
+    };
+
+    $scope.addToTimeline = function() {
+        var slide = Config.defaultSlide($scope.getJSON());
+        if (SlidesService.selected.slide) {
+            SlidesService.overwriteSelected(slide);
+        } else {
+            SlidesService.addSlide(slide);
+        }
     };
 
     /***************************
@@ -379,7 +388,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
     };
 
     $scope.playSlide = function(index, nextSlide) {
-        var currentSlide = slides.slides[index];
+        var currentSlide = SlidesService.slides[index];
         var nop = function(x, y, cb) {cb()};
 
         $scope.loadSlide(currentSlide,
@@ -395,7 +404,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
 
         var changeSlide = function() {
             currentSlide++;
-            if ($scope.playing && currentSlide < slides.slides.length) {
+            if ($scope.playing && currentSlide < SlidesService.slides.length) {
                 $scope.playSlide(currentSlide, changeSlide);
             } else {
                 $scope.continueRender = false;
