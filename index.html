@@ -128,9 +128,9 @@
                                 <button type="button" class="effects btn btn-success btn-xs" ng-click="effectShow($index);">fx
                                 </button>
                                 <div class="effect-controller" ng-class="{active: $index == effectIndex}">
-                                    <input class="effect-checkbox" type="checkbox" ng-model="slide.fadeIn" ng-true-value="1000" ng-false-value="0">
+                                    <input class="effect-checkbox" type="checkbox" ng-model="slide.fadeIn" ng-true-value="60" ng-false-value="0">
                                     <p class="effect-label">FADE OUT</p>
-                                    <input class="effect-checkbox" type="checkbox" ng-model="slide.fadeOut" ng-true-value="1000" ng-false-value="0">
+                                    <input class="effect-checkbox" type="checkbox" ng-model="slide.fadeOut" ng-true-value="60" ng-false-value="0">
                                      <select class="form-control kenBurns" ng-model="slide.kenBurns" ng-options="option.value as option.label for option in effects"></select>
                                     <p class="effect-label">FADE IN</p>
                                 </div>

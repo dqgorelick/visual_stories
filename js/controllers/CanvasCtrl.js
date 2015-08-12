@@ -5,10 +5,10 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
     $scope.canvas_height = 338;
     $scope.video = null;
     $scope.showCanvas = true;
-    $scope.continueRender = true;
     $scope.playing = false;
     $scope.renderedVideo = null;
     $scope.selected = SlidesService.selected;
+    $scope.isRecording = false;
 
     $scope.resetVideo = function() {
         $scope.video = new Whammy.Video(15);
@@ -160,32 +160,17 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         return text;
     };
 
-    $scope.drawAll = function() {
-        var configs = Config.get();
-        if (!_.some(configs.position)) {
-            alert("Must at least select a top left corner for text");
-            return;
-        }
+    $scope.moveToBottom = function(text) {
+        var rect = text.getBoundingRect();
+        var pos = Math.round($scope.canvas_height - rect.height) - 10;
+        text.top = pos;
+        $scope.canvas.renderAll();
+    }
 
-        if (configs.overlay.enabled) {
-            $scope.canvas.add($scope.createOverlay(configs.position, configs.overlay));
-        }
-
-        if (configs.text) {
-            var text = $scope.createText(configs.position, configs.text);
-            $scope.canvas.add(text);
-        }
-    };
 
     /***************************
     **        Video           **
     ***************************/
-    $scope.addFrame = function() {
-        $scope.video.add($scope.canvas.getContext("2d"),30);
-        if ($scope.continueRender) {
-            requestAnimationFrame($scope.addFrame);
-        }
-    };
 
     $scope.finalizeVideo = function() {
         var output = $scope.video.compile();
@@ -225,6 +210,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
     $scope.restoreSlide = function(){
         $scope.canvas.clear();
         if ($scope.selected.slide) {
+            //CLEANUP - this addbutton thing is not really angular
             $scope.addButton = "Override";
             $scope.loadSlide($scope.selected.slide, function() {
                 $scope.canvas.renderAll();
@@ -249,6 +235,9 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         });
     };
 
+    //CLEANUP: This is an ugly patch - save/load JSON somehow decenters text that
+    //should be centered - maybe a fabric bug / something to do with the wrapText
+    //function.
     $scope.centerText = function(horizontal) {
         objects = $scope.canvas.getObjects();
         texts = _.each(objects, function(obj) {
@@ -260,15 +249,17 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         });
     }
 
-    /***************************
-    **  Creating Slides       **
-    ***************************/
+    /***************************                                ****
+    **  Creating Slides       ******************************************
+    * TODO: put these into a new controller for  slide defaults.   *******
+    *                         ******************************************
+    ****************************                                ****/
 
     $scope.createStarterSlide = function() {
         $scope.chooseImage("starter", true);
         var starter = Config.defaultSlide($scope.getJSON());
-        starter.duration = 1500;
-        starter.fadeIn = 1000;
+        starter.duration = 60;
+        starter.fadeIn =  60;
         starter.fadeOut = 0;
         starter.kenBurns = 0;
         $scope.canvas.clear();
@@ -293,7 +284,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         $scope.chooseText(headline, headlineStyle, headlinePosition, true);
         $scope.chooseText(byline, bylineStyle, bylinePosition, true);
         var headliner = Config.defaultSlide($scope.getJSON());
-        headliner.fadeIn = 1000;
+        headliner.fadeIn = 1000  / 1000 * 60;
         headliner.kenBurns = 0;
         $scope.clearCanvas();
         return headliner;
@@ -328,18 +319,11 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         return imageSlide;
     }
 
-    $scope.moveToBottom = function(text) {
-        var rect = text.getBoundingRect();
-        var pos = Math.round($scope.canvas_height - rect.height) - 10;
-        text.top = pos;
-        $scope.canvas.renderAll();
-    }
-
     $scope.generateEndingSlide = function() {
         $scope.chooseImage("ender", true);
         var ender = Config.defaultSlide($scope.getJSON());
         ender.kenBurns = 0;
-        ender.duration = 1500;
+        ender.duration = 1500  / 1000 * 60;
         $scope.clearCanvas();
         return ender;
     }
@@ -359,7 +343,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
             var numImages = Math.min(loaded.images.length, MAX_NUMBER_OF_IMAGES);
 
             for (var it = 0; it < numImages; it++) {
-                var effects = {kenBurns: it%6+1}
+                var effects = {kenBurns: it % 6+1}
                 var caption = (it == 0) ? summary : null;
                 var slide = $scope.generateImageSlide('image' + it, caption, effects);
                 SlidesService.addSlide(slide);
@@ -384,142 +368,117 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
 
     $scope.stop = function(){
         $scope.playing = false;
-        $scope.canvas.clear();
-    };
-
-    $scope.playSlide = function(index, nextSlide) {
-        var currentSlide = SlidesService.slides[index];
-        var nop = function(x, y, cb) {cb()};
-
-        $scope.loadSlide(currentSlide,
-            _.partial((currentSlide.duration ? $scope.fade : nop), false, currentSlide,
-            _.partial(currentSlide.fadeOut ? $scope.fade : nop, true, currentSlide, nextSlide)));
+        console.log('stopped and reset video');
+        $scope.resetVideo();
     };
 
     $scope.playSlides = function(recording) {
-        $scope.clearCanvas();
-        $scope.continueRender = true;
-        var currentSlide = -1;
         $scope.playing = true;
+        $scope.isRecording = recording;
+        $scope.changeSlide(0);
+    };
 
-        var changeSlide = function() {
-            currentSlide++;
-            if ($scope.playing && currentSlide < SlidesService.slides.length) {
-                $scope.playSlide(currentSlide, changeSlide);
-            } else {
-                $scope.continueRender = false;
-                if (recording) {
-                    $scope.finalizeVideo();
-                }
-                $scope.playing = false;
-                $scope.$apply();
+    /*New animation stuff*/
+    $scope.changeSlide = function(index) {
+        $scope.clearCanvas();
+
+        if (index >= SlidesService.slides.length) {
+            console.log('done');
+            if ($scope.isRecording) {
+                $scope.finalizeVideo();
+                $scope.isRecording = false;
             }
-        };
-
-        if (recording) {
-            $scope.addFrame();
+            $scope.stop(); //We're done!
         }
 
-        changeSlide();
+        var slide = SlidesService.slides[index];
+        console.log(index);
+        $scope.loadSlide(slide, function() {
+            console.log('loading slide', slide);
+            var ticksRemaining = slide.duration;
+
+            if (slide.fadeIn) {
+                $scope.hideAll();
+            }
+
+            animateSlide(index, ticksRemaining);
+        });
     };
 
-    $scope.fade = function(out, slide, onComplete) {
-        if (!$scope.playing) return;
+    function animateSlide(index, ticksRemaining) {
+        if (!$scope.playing) {
+            return;
+        }
 
-        if (out) {
-            $scope.fadeOut(slide, onComplete);
+        var slide = SlidesService.slides[index];
+
+        //TODO: add more
+        var animations = {};
+
+        if (slide.kenBurns) {
+            animations = $scope.createAnimation(slide);
+        }
+
+        if (slide.fadeIn && ticksRemaining - slide.fadeIn >= 0) {
+            animations['opacity'] = 1 / slide.fadeIn;
+        }
+
+        if (slide.fadeOut && ticksRemaining - slide.fadeOut <= 0) {
+            animations['opacity'] = 1 / slide.fadeOut;
+        }
+
+        tickCanvas(animations);
+        ticksRemaining--;
+
+        if ($scope.isRecording) {
+            $scope.video.add($scope.canvas.getContext("2d"), 16.77);
+        }
+
+        if (ticksRemaining > 0) {
+            fabric.util.requestAnimFrame(_.partial(animateSlide, index, ticksRemaining));
         } else {
-            $scope.fadeIn(slide, onComplete);
+            $scope.changeSlide(index + 1);
         }
-    };
+    }
 
-    $scope.fadeIn = function(slide, onComplete) {
-        if (!$scope.playing) return;
-
-        var obj = $scope.canvas._objects[0];
-        if (!obj) return;
-        var trueDuration = slide.duration - slide.fadeOut
-        var animation = $scope.createAnimation(slide, obj, trueDuration);
-
-        obj.animate(animation, {
-            onChange: $scope.canvas.renderAll.bind($scope.canvas),
-            duration: trueDuration,
-            onComplete: onComplete,
-            abort: function() {return !$scope.playing;}
+    function tickCanvas(animations) {
+        _.each($scope.canvas._objects, function(obj) {
+            _.each(animations, function(val, key) {
+                obj[key] += val;
+            });
         });
-    };
+        $scope.canvas.renderAll();
+    }
 
-    $scope.fadeOut = function(slide, onComplete) {
-        var obj = $scope.canvas._objects[0];
-        if (!obj) return;
-        obj.opacity = 1;
-        obj.animate('opacity', 0, {
-            onChange: $scope.canvas.renderAll.bind($scope.canvas),
-            duration: slide.fadeOut,
-            onComplete: onComplete,
-            abort: function() {return !$scope.playing;}
-        });
-    };
-
-    $scope.createAnimation = function(slide, obj, duration) {
-        var animation = {};
-        if (slide.fadeIn) {
+    $scope.hideAll = function() {
+        _.each($scope.canvas._objects, function(obj) {
             obj.opacity = 0;
-            animation['opacity'] = duration / slide.fadeIn;
-        }
+        });
+        $scope.canvas.renderAll();
+    }
+
+    $scope.createAnimation = function(slide) {
+        //TODO: rebuild these
+        var animation = {};
         switch (slide.kenBurns) {
             case 0:
-                animation["scaleX"] = obj.scaleX;
-                break;
-            case 1:
-                // zoom in, slide to the left/down
-                var scale = 0.1;
-                animation['left'] = obj.getLeft() - 10;
-                animation['top'] = obj.getTop() - 25;
-                animation['scaleX'] = (obj.scaleX + scale);
-                animation['scaleY'] = (obj.scaleY + scale);
-                break;
-            case 2:
-                // panning left/up w/o zoom
-                var scale = 0.25;
-                obj.scaleX = (obj.scaleX + scale);
-                obj.scaleY = (obj.scaleY + scale);
-                obj.top = -75;
-                obj.left = -100;
-                animation['left'] = obj.getLeft()+100;
-                animation['top'] = obj.getTop()+20;
-                break;
-            case 3:
-                // zoom into center
-                var scale = 0.1;
-                animation['top'] = (obj.height*(obj.scaleY) - obj.height*(obj.scaleY + scale)) / 2;
-                animation['left'] = (obj.width*(obj.scaleX) - obj.width*(obj.scaleX + scale)) / 2;
-                animation['scaleX'] = (obj.scaleX + scale);
-                animation['scaleY'] = (obj.scaleY + scale);
-                break;
-            case 4:
-                // panning right w/o zoom
-                var scale = 0.25;
-                obj.scaleX = (obj.scaleX + scale);
-                obj.scaleY = (obj.scaleY + scale);
-                obj.top = -75;
-                obj.left = 0;
-                animation['left'] = -100;
-                break;
-            case 5:
-                // zoom into center
-                var scale = 0.1;
-                animation['left'] = (obj.width * obj.scaleX - obj.width * (obj.scaleX + scale)) / 2;
-                animation['scaleX'] = obj.scaleX + scale;
-                animation['scaleY'] = obj.scaleY + scale;
                 break;
             default:
-                animation["scaleX"] = obj.scaleX;
+                var scale = 0.1;
+                animation['left'] =  0;
+                animation['top'] =  - 25;
+                animation['scaleX'] =  scale;
+                animation['scaleY'] =  scale;
                 break;
         }
+
+        _.each(animation, function(val, key) {
+            animation[key] = val / slide.duration;
+        });
 
         return animation;
     };
+
 
 
     /***************************
