@@ -1,7 +1,7 @@
 angular.module('Timeline', ['SlidesService', 'ConfigService', 'cfp.hotkeys']).controller('TimelineCtrl', function($scope, SlidesService, hotkeys, Config) {
 
     $scope.SlidesService = SlidesService;
-    $scope.expandTimeline = false;
+    $scope.expandTimeline = true;
     $scope.effectIndex = -1;
 
     hotkeys.add({

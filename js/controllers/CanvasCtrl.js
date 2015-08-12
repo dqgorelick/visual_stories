@@ -44,6 +44,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         description: 'Undo the last action.',
         callback: $scope.popUndo
     });
+
     hotkeys.add({
         combo: 'space',
         description: 'Play / Pause',
@@ -56,6 +57,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
             event.preventDefault();
         }
     });
+
     hotkeys.add({
         combo: 'backspace',
         description: 'Delete the selected object',
@@ -64,6 +66,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
             $scope.deleteSelected();
         }
     });
+
     hotkeys.add({
         combo: 'shift+backspace',
         description: 'Clear the canvas',
@@ -258,8 +261,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
     $scope.createStarterSlide = function() {
         $scope.chooseImage("starter", true);
         var starter = Config.defaultSlide($scope.getJSON());
-        starter.duration = 60;
-        starter.fadeIn =  60;
+        starter.duration = 1000 / 1000 * 60;
         starter.fadeOut = 0;
         starter.kenBurns = 0;
         $scope.canvas.clear();
@@ -284,7 +286,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         $scope.chooseText(headline, headlineStyle, headlinePosition, true);
         $scope.chooseText(byline, bylineStyle, bylinePosition, true);
         var headliner = Config.defaultSlide($scope.getJSON());
-        headliner.fadeIn = 1000  / 1000 * 60;
+        headliner.fadeIn = 1000 / 1000 * 60;
         headliner.kenBurns = 0;
         $scope.clearCanvas();
         return headliner;
@@ -366,10 +368,11 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
     **    Animate Slide       **
     ***************************/
 
-    $scope.stop = function(){
+    $scope.stop = function() {
         $scope.playing = false;
         console.log('stopped and reset video');
         $scope.resetVideo();
+        _.defer(function(){$scope.$apply();});
     };
 
     $scope.playSlides = function(recording) {
@@ -385,6 +388,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         if (index >= SlidesService.slides.length) {
             console.log('done');
             if ($scope.isRecording) {
+                console.log('done rendering');
                 $scope.finalizeVideo();
                 $scope.isRecording = false;
             }
@@ -392,20 +396,24 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         }
 
         var slide = SlidesService.slides[index];
-        console.log(index);
         $scope.loadSlide(slide, function() {
-            console.log('loading slide', slide);
             var ticksRemaining = slide.duration;
 
-            if (slide.fadeIn) {
-                $scope.hideAll();
-            }
-
-            animateSlide(index, ticksRemaining);
+            $scope.initSlideObjects(slide);
+            $scope.animateSlide(index, ticksRemaining);
         });
     };
 
-    function animateSlide(index, ticksRemaining) {
+    $scope.initSlideObjects = function(slide) {
+        if (slide.fadeIn) {
+            $scope.hideAll();
+        }
+
+        $scope.resizeForKen(slide.kenBurns);
+        $scope.canvas.renderAll();
+    }
+
+    $scope.animateSlide = function(index, ticksRemaining) {
         if (!$scope.playing) {
             return;
         }
@@ -427,24 +435,26 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
             animations['opacity'] = 1 / slide.fadeOut;
         }
 
-        tickCanvas(animations);
+        $scope.tickCanvas(animations);
         ticksRemaining--;
 
         if ($scope.isRecording) {
-            $scope.video.add($scope.canvas.getContext("2d"), 16.77);
+            $scope.video.add($scope.canvas.getContext("2d"), 16.77777);
         }
 
         if (ticksRemaining > 0) {
-            fabric.util.requestAnimFrame(_.partial(animateSlide, index, ticksRemaining));
+            fabric.util.requestAnimFrame(_.partial($scope.animateSlide, index, ticksRemaining));
         } else {
             $scope.changeSlide(index + 1);
         }
     }
 
-    function tickCanvas(animations) {
+    $scope.tickCanvas = function(animations) {
         _.each($scope.canvas._objects, function(obj) {
             _.each(animations, function(val, key) {
-                obj[key] += val;
+                if (obj.type == 'image') {
+                    obj[key] += val;
+                }
             });
         });
         $scope.canvas.renderAll();
@@ -454,21 +464,59 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         _.each($scope.canvas._objects, function(obj) {
             obj.opacity = 0;
         });
-        $scope.canvas.renderAll();
+    }
+
+    $scope.resizeForKen = function(kenBurns) {
+        var SCALE = .1;
+        _.each($scope.canvas._objects, function(obj) {
+            if (obj.type != 'text') {
+                switch (kenBurns) {
+                    case 2:
+                        scaleObject(obj, SCALE);
+                        break;
+                    case 4:
+                        scaleObject(obj, SCALE);
+                        obj.left -= 50;
+                        break;
+                    case 5:
+                        scaleObject(obj, SCALE);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     $scope.createAnimation = function(slide) {
-        //TODO: rebuild these
         var animation = {};
+        var PAN_SPEED = 50;
+        var SCALE = 0.3;
+
         switch (slide.kenBurns) {
-            case 0:
+            case 1:
+                animation['left'] = -PAN_SPEED / 2;
+                animation['top'] = -PAN_SPEED;
+                animation['scaleX'] = SCALE;
+                animation['scaleY'] = SCALE;
+                break;
+            case 2:
+                animation['left'] = -PAN_SPEED;
+                animation['top'] = -PAN_SPEED;
+                break;
+            case 3:
+                animation['scaleX'] = SCALE;
+                animation['scaleY'] = SCALE;
+                animation['left'] = -PAN_SPEED * 1.75;
+                animation['top'] = -PAN_SPEED * 1.25;
+                break;
+            case 4:
+                animation['left'] = PAN_SPEED;
+                break;
+            case 5:
+                animation['left'] = -PAN_SPEED;
                 break;
             default:
-                var scale = 0.1;
-                animation['left'] =  0;
-                animation['top'] =  - 25;
-                animation['scaleX'] =  scale;
-                animation['scaleY'] =  scale;
                 break;
         }
 
