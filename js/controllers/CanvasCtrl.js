@@ -121,8 +121,12 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         return text;
     }
 
-    $scope.clearCanvas = function() {
-        $scope.canvas.clear();
+    $scope.clearCanvas = function(destroyOnly) {
+        if (destroyOnly) {
+            $scope.canvas._objects.length = 0;
+        } else {
+            $scope.canvas.clear(destroyOnly);
+        }
     };
 
     $scope.createOverlay = function(rect, options) {
@@ -234,20 +238,16 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         }
         $scope.canvas.loadFromJSONWithoutClearing(slide.json, function() {
             callback ? callback() : $scope.canvas.renderAll();
-            $scope.centerText();
         });
     };
 
     //CLEANUP: This is an ugly patch - save/load JSON somehow decenters text that
-    //should be centered - maybe a fabric bug / something to do with the wrapText
-    //function.
-    $scope.centerText = function(horizontal) {
+    //should be centered - maybe a fabric bug / something to do with the wrapText function.
+    $scope.centerText = function() {
         objects = $scope.canvas.getObjects();
         texts = _.each(objects, function(obj) {
-            if (obj.type == 'text') {
-                if (obj.__textAlign === 'center') {
-                    obj.centerH();
-                }
+            if (obj.type === 'text' && obj.textAlign === 'center') {
+                obj.centerH();
             }
         });
     }
@@ -383,8 +383,6 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
 
     /*New animation stuff*/
     $scope.changeSlide = function(index) {
-        $scope.clearCanvas();
-
         if (index >= SlidesService.slides.length) {
             console.log('done');
             if ($scope.isRecording) {
@@ -396,6 +394,8 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         }
 
         var slide = SlidesService.slides[index];
+
+        $scope.clearCanvas(true);
         $scope.loadSlide(slide, function() {
             var ticksRemaining = slide.duration;
 
@@ -409,7 +409,9 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
             $scope.hideAll();
         }
 
+
         $scope.resizeForKen(slide.kenBurns);
+        $scope.centerText();
         $scope.canvas.renderAll();
     }
 
@@ -452,7 +454,8 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
     $scope.tickCanvas = function(animations) {
         _.each($scope.canvas._objects, function(obj) {
             _.each(animations, function(val, key) {
-                if (obj.type == 'image') {
+                //This is an easy way to set up multiple animation.
+                if (obj.type == 'image' || key == 'opacity') {
                     obj[key] += val;
                 }
             });
@@ -472,7 +475,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
             if (obj.type != 'text') {
                 switch (kenBurns) {
                     case 2:
-                        scaleObject(obj, SCALE);
+                        scaleObject(obj, SCALE * 2);
                         break;
                     case 4:
                         scaleObject(obj, SCALE);
