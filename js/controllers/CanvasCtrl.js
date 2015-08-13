@@ -391,10 +391,11 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
                 $scope.isRecording = false;
             }
             $scope.stop(); //We're done!
+            return;
         }
 
         var slide = SlidesService.slides[index];
-
+        console.log(slide);
         $scope.clearCanvas(true);
         $scope.loadSlide(slide, function() {
             var ticksRemaining = slide.duration;
@@ -429,12 +430,12 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
             animations = $scope.createAnimation(slide);
         }
 
-        if (slide.fadeIn && ticksRemaining - slide.fadeIn >= 0) {
+        if (slide.fadeIn && (slide.duration - slide.fadeIn) < ticksRemaining) {
             animations['opacity'] = 1 / slide.fadeIn;
         }
 
-        if (slide.fadeOut && ticksRemaining - slide.fadeOut <= 0) {
-            animations['opacity'] = 1 / slide.fadeOut;
+        if (slide.fadeOut && (ticksRemaining - slide.fadeOut) <= 0) {
+            animations['opacity'] = - 1 / slide.fadeOut;
         }
 
         $scope.tickCanvas(animations);
@@ -455,7 +456,14 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         _.each($scope.canvas._objects, function(obj) {
             _.each(animations, function(val, key) {
                 //This is an easy way to set up multiple animation.
-                if (obj.type == 'image' || key == 'opacity') {
+                if (key == 'opacity') {
+                    obj[key] += val;
+                    if (obj.opacity < 0) {
+                        obj.opacity = 0;
+                    } else if (obj.opacity > 1) {
+                        obj.opacity = 1;
+                    }
+                } else if (obj.type == 'image') {
                     obj[key] += val;
                 }
             });
