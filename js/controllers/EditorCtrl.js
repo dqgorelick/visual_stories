@@ -65,8 +65,8 @@ angular.module('Editor', ['ConfigService']).controller('EditorCtrl', function($s
         overlayColor: '#000000',
     };
 
-    // $scope.fonts = ['NYTCheltenhamBdCon', 'NYTCheltenhamBdXCon', 'NYTCheltenhamBold', 'NYTCheltenhamBook', 'NYTCheltenhamExtBd', 'NYTCheltenhamExtLt', 'NYTCheltenhamLt', 'NYTCheltenhamLtCon', 'NYTCheltenhamLtSC', 'NYTCheltenhamMedCon', 'NYTCheltenhamMedium', 'NYTCheltenhamWide', 'NYTFranklinBold', 'NYTFranklinExtraBd', 'NYTFranklinHeadline', 'NYTFranklinLight', 'NYTFranklinMedium', 'NYTFranklinSemiBold', 'NYTImperial', 'NYTImperialSemiBold', 'NYTKarnakDisplay', 'NYTKarnakText', 'NYTStymieLight', 'NYTStymieMedium']
     $scope.fonts = ['NYTCheltenhamBdCon-Regular', 'NYTCheltenhamBdXCon-Regular', 'NYTCheltenhamBold-Italic', 'NYTCheltenhamBold-Regular', 'NYTCheltenhamBook-Italic', 'NYTCheltenhamBook-Regular', 'NYTCheltenhamExtBd-Italic', 'NYTCheltenhamExtBd-Regular', 'NYTCheltenhamExtLt-Italic', 'NYTCheltenhamExtLt-Regular', 'NYTCheltenhamLt-Italic', 'NYTCheltenhamLt-Regular', 'NYTCheltenhamLtCon-Regular', 'NYTCheltenhamLtSC-Regular', 'NYTCheltenhamMedCon-Regular', 'NYTCheltenhamMedium-Italic', 'NYTCheltenhamMedium-Regular', 'NYTCheltenhamWide-Italic', 'NYTCheltenhamWide-Regular', 'NYTFranklinBold-Italic', 'NYTFranklinBold-Regular', 'NYTFranklinExtraBd-Italic', 'NYTFranklinExtraBd-Regular', 'NYTFranklinHeadline-Italic', 'NYTFranklinHeadline-Regular', 'NYTFranklinLight-Italic', 'NYTFranklinLight-Regular', 'NYTFranklinMedium-Italic', 'NYTFranklinMedium-Regular', 'NYTFranklinSemiBold-Regular', 'NYTImperial-Bold', 'NYTImperial-BoldItalic', 'NYTImperial-Italic', 'NYTImperial-Regular', 'NYTImperialSemiBold-Italic', 'NYTImperialSemiBold-Regular', 'NYTKarnakDisplay-Regular', 'NYTKarnakText-Regular', 'NYTStymieLight-Regular', 'NYTStymieMedium-Regular'];
+
     $scope.text = {
         content: '',
         color: '#ffffff',

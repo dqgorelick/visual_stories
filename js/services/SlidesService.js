@@ -6,7 +6,7 @@ angular.module('SlidesService', []).factory('SlidesService', [function() {
 
     var getTime = function() {
         var millis = _.reduce(slides, function(memo, slide) {
-            return memo + slide.duration;
+            return memo + slide.duration * 1000 / 60;
         }, 0);
 
         var display = millis / 1000 + ' seconds';

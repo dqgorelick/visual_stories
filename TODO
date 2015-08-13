@@ -31,12 +31,13 @@ THINGS TO ADD
 BUGS TO FIX:
     Video not always correct duration
     Itext doesn't wrap/respect font
+    safari webm creation doesn't work.
 
 
 
 DONE:
     MAKE FONTS WORK for people testing app on the server - DONE
-    Make fonts work for Firefox and Safi as well
+    Make fonts work for Firefox and Safari as well
     caption on two slides. - DONE
     panning bug - Dan - DONE
     fix timing (account for ken burns & fadeOut) - Dan - DONE

@@ -1,7 +1,7 @@
 angular.module('Timeline', ['SlidesService', 'ConfigService', 'cfp.hotkeys']).controller('TimelineCtrl', function($scope, SlidesService, hotkeys, Config) {
 
     $scope.SlidesService = SlidesService;
-    $scope.expandTimeline = false;
+    $scope.expandTimeline = true;
     $scope.effectIndex = -1;
 
     hotkeys.add({
@@ -13,12 +13,12 @@ angular.module('Timeline', ['SlidesService', 'ConfigService', 'cfp.hotkeys']).co
     });
 
     $scope.durations = [
-        {value: 500, label: '0.5 secs'},
-        {value: 1000, label: '1 sec'},
-        {value: 1500, label: '1.5 secs'},
-        {value: 2000, label: '2 secs'},
-        {value: 2500, label: '2.5 secs'},
-        {value: 3000, label: '3 secs'}
+        {value: 500 / 1000 * 60, label: '0.5 secs'},
+        {value: 1000 / 1000 * 60, label: '1 sec'},
+        {value: 1500 / 1000 * 60, label: '1.5 secs'},
+        {value: 2000 / 1000 * 60, label: '2 secs'},
+        {value: 2500 / 1000 * 60, label: '2.5 secs'},
+        {value: 3000 / 1000 * 60, label: '3 secs'}
     ];
 
     $scope.effects = [

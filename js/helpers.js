@@ -14,6 +14,11 @@ function downloadFile(file, name, isObjectURL) {
     document.body.removeChild(a);
 }
 
+function scaleObject(obj, scale) {
+    obj.scaleX += scale;
+    obj.scaleY += scale;
+}
+
 function wrapCanvasText(t, canvas, options) {
 
     if (typeof maxH === "undefined") {

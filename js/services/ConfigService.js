@@ -2,7 +2,7 @@ angular.module('ConfigService', []).factory('Config', [function() {
     var configs = {};
 
     var settings = {
-        duration: 2500,
+        duration: (2500 / 1000) * 60,
         fadeOut: 0,
         fadeIn: 0,
         kenBurns: 0,
