@@ -23,12 +23,24 @@ angular.module('AssetService', []).factory("assets", ['$http', '$q', function($h
 			{ "name": "Byline",
 			"text": article.result.byline},
 			{ "name": "Date",
-			"text": article.result.publication_iso_date},
+			"text": cleanDate(article.result.publication_iso_date)},
 			{ "name": "Kicker",
 			"text": article.result.kicker},
 			{ "name": "Link",
 			"text": article.result.short_url ? article.result.short_url : article.result.url}
     	];
+  	}
+
+  	function cleanDate(ugly){
+  		var monthsLower = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  		var monthsUpper = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+  		//	ugly = "2015-07-01T00:00:00.000.EDT"
+  		ugly = ugly.split("-");
+  		//	ugly = ["2015", "07", "01T00:00:00.000.EDT"]
+  		var clean = monthsLower[parseInt(ugly[1]) - 1] + " " + parseInt(ugly[2]) + ", " + ugly[0];
+  		// 	PAPI date is 1 day ahead of date on "A Most Dangerous Game" story
+  		// 	clean = JULY 01, 2015
+  		return clean;
   	}
 
   	function getImages(section) {

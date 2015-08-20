@@ -1,7 +1,7 @@
 angular.module('SlidesService', []).factory('SlidesService', [function() {
 
     var slides = [];
-    var time = {millis: 0, display: '0 seconds'};
+    var time = {millis: 10, display: '0 seconds'};
     var selected = {slide: null};
 
     var getTime = function() {

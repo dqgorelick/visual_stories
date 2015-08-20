@@ -105,7 +105,7 @@
                </div>
             </div>
             <input ng-show="showCanvas" class="btn btn-sm btn-primary addSlide" ng-click="addToTimeline()" value="{{selected.slide ? 'Override' : 'Add slide'}}" type="button">
-        <div ng-controller="TimelineCtrl as loki">
+        <div ng-controller="TimelineCtrl">
             <div id="timeline" class="sliding" ng-class="{expanded: expandTimeline}">
                 <button class="btn btn-sm btn-primary" ng-click="expandTimeline = !expandTimeline;" type="button">
                 <span class="glyphicon glyphicon-resize-vertical"></span>
