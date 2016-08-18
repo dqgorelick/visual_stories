@@ -34,18 +34,13 @@
             <div id="modalWrapper">
                 <img src="./assets/slides/logo.png"><br>
                 <h1 class="navbar-left karnak" >Times Trailer</h1>
-                <form ng-submit="$parent.getArticle()" id="search" class="navbar-right input-group input-group-lg row-fluid">
-                    <input autofocus ng-model="$parent.url" type="text" class="form-control karnak" placeholder="Enter article URL here">
-                    <button type="submit" class="input-group-addon btn btn-lg"><span class="glyphicon glyphicon-search"></span></button>
-                </form>
-                <button class="show_more btn btn-sm btn-primary" ng-click="$parent.recents();">show recent articles</button>
-                <div id="recents">
-                    <ul class="list-unstyled">
-                        <li ng-repeat="item in $parent.recentArticles" ng-click="$parent.url = item.url; $parent.getArticle();">
-                            {{item.headline}}
-                        </li>
-                    </ul>
+                <form id="search" class="navbar-right">
+                    <h4>Choose an article:</h4>
+                    <p class="choose-article" ng-click="$parent.getArticle(0)">The Most Dangerous Game</p>
+                    <p class="choose-article" ng-click="$parent.getArticle(2)">Summer Love Romance Tested By Fire And Other Calamities</p>
+                    <p class="choose-article" ng-click="$parent.getArticle(4)">The Bronx Zoos Loneliest Elephant</p>
                 </div>
+                </form>
             </div>
         </div>
     </script>
@@ -98,8 +93,6 @@
         </div>
             <div ng-show="!showCanvas" id="socialWrapper">
                 <input class="btn btn-sm btn-primary" value="Download" type="button" ng-click="downloadWebM()"/>
-                <input class="btn btn-sm btn-primary" value="Download As MOV" type="button" ng-click="downloadMov()">
-                <input class="btn btn-sm btn-primary" value="Convert to .gif" type="button" ng-click="downloadGIF()" />
                 <progressbar ng-show="writingGIF" class="progress-striped active" value="writingGIF" type="info"></progressbar>
                <div id="finished">
                </div>

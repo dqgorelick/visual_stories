@@ -12,8 +12,8 @@ angular.module('Assets', ['AssetService', 'ConfigService', 'ui.bootstrap']).cont
         {active: false},
     ];
 
-	$scope.$on('article:load', function(event, url) {
-		assets.getData(url).then(function(data) {
+	$scope.$on('article:load', function(event, args) {
+		assets.getData(args.url, args.number).then(function(data) {
 			$scope.assets = data;
 		});
 	});

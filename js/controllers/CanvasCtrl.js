@@ -370,7 +370,6 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
 
     $scope.stop = function() {
         $scope.playing = false;
-        console.log('stopped and reset video');
         $scope.resetVideo();
         _.defer(function(){$scope.$apply();});
     };
@@ -384,9 +383,7 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
     /*New animation stuff*/
     $scope.changeSlide = function(index) {
         if (index >= SlidesService.slides.length) {
-            console.log('done');
             if ($scope.isRecording) {
-                console.log('done rendering');
                 $scope.finalizeVideo();
                 $scope.isRecording = false;
             }
@@ -395,7 +392,6 @@ angular.module('Canvas', ['AssetService', 'ConfigService', 'SlidesService', 'cfp
         }
 
         var slide = SlidesService.slides[index];
-        console.log(slide);
         $scope.clearCanvas(true);
         $scope.loadSlide(slide, function() {
             var ticksRemaining = slide.duration;

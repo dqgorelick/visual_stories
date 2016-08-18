@@ -99,25 +99,14 @@ angular.module('AssetService', []).factory("assets", ['$http', '$q', function($h
 	}
 
 	var stubbed = true;
-
-	var getData = function(article) {
-	    var url;
-	    if (!article && stubbed) {
-	        stubbed = true;
-	        url = "/assets/articles/article0.json";
-	    } else if (!article && !stubbed) {
-	        url = lastUrl;
-	    } else {
-	        stubbed = false;
-	        url = '/api/' + article;
-	    }
-	    lastUrl = url;
-
-	    if (cache[url]) {
-	        return $q(function(resolve) {
-	            resolve(cache[url]);
-	        });
-	    }
+	var lastNumber;
+	var getData = function(article, number) {
+		if (number !== undefined) {
+			lastNumber = number;
+		}
+		// if (number === undefined) return;
+		number = lastNumber;
+	    var url = "/assets/articles/article" + number + ".json";
 	    return $http({
 	        method: 'GET',
 	        url: url
@@ -137,7 +126,6 @@ angular.module('AssetService', []).factory("assets", ['$http', '$q', function($h
 	        if (article) {
 	            localStorage.setItem(response.data.result.headline, url)
 	        }
-	        cache[url] = result;
 	        return result;
 	    });
 	}

@@ -2,9 +2,9 @@ angular.module('Article', ['AssetService', 'ui.bootstrap']).controller("ArticleC
 
     $scope.url = '';
 
-    $scope.getArticle = function() {
+    $scope.getArticle = function(number) {
         $scope.modalInstance.close();
-        $rootScope.$broadcast('article:load', $scope.url);
+        $rootScope.$broadcast('article:load', {url: $scope.url, number: number});
     }
 
     $scope.open = function() {

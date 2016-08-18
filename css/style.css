@@ -133,6 +133,13 @@ body{
     top:3;
 }
 
+.choose-article {
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 18px;
+    text-align: left;
+}
+
 /******************************
         Overlay
 *******************************/

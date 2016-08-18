@@ -2,7 +2,7 @@ var fs              = require('fs');
 var express         = require('express');
 var router          = express.Router();
 var Busboy          = require('busboy');
-var papi            = require('./papi.js');
+// var papi            = require('./papi.js');
 var convert         = require('./convert.js');
 
 //All get requests proxy to papi.
